@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Apartments — Fortune House</title>
+<meta name="description" content="Search apartments and villas for rent across Thailand by city, dates and number of guests.">
+<meta name="theme-color" content="#efefec">
+<link rel="preconnect" href="https://images.unsplash.com">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%230e0e0e'/%3E%3Cpath d='M9.5 23v-9.5L16 8l6.5 5.5V23M13.5 23v-5h5v5' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body data-page="search">
+<a class="sr-only" href="#main">Skip to content</a>
+<div class="header-wrap">
+  <header class="header">
+    <a href="index.html" class="logo" aria-label="Fortune House — home">
+      <span class="logo__mark"><i data-icon="logo" data-size="20" data-sw="1.8"></i></span>
+      Fortune House
+    </a>
+    <nav class="nav" aria-label="Main">
+      <a href="search.html" aria-current="page">Apartments</a>
+      <a href="index.html#why">Why us</a>
+      <a href="investors.html">For investors</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <div class="header__actions">
+      <button type="button" class="btn btn--primary btn--sm btn--arrow header__cta" data-open="finder">
+        Choose apartment
+        <span class="btn__arrow"><i data-icon="arrow-pair" data-size="16"></i></span>
+      </button>
+      <button type="button" class="burger" aria-label="Menu" aria-expanded="false" aria-controls="mobile-menu">
+        <span class="burger-lines"><span></span><span></span></span>
+      </button>
+    </div>
+  </header>
+  <div class="mobile-menu" id="mobile-menu">
+    <a class="mm-link" href="search.html">Apartments <i data-icon="arrowRight" data-size="20"></i></a>
+    <a class="mm-link" href="index.html#why">Why us <i data-icon="arrowRight" data-size="20"></i></a>
+    <a class="mm-link" href="investors.html">For investors <i data-icon="arrowRight" data-size="20"></i></a>
+    <a class="mm-link" href="#contact">Contact <i data-icon="arrowRight" data-size="20"></i></a>
+    <button type="button" class="btn btn--primary btn--block btn--arrow" data-open="finder">
+      <span>Choose apartment</span>
+      <span class="btn__arrow"><i data-icon="arrow-pair" data-size="18"></i></span>
+    </button>
+  </div>
+</div>
+<div class="menu-scrim"></div>
+
+
+<main class="page" id="main">
+
+  <section class="card page-hero" aria-labelledby="results-title">
+    <div class="container">
+      <div class="page-hero__head intro">
+        <nav class="crumbs" aria-label="Breadcrumb"><a href="index.html">Home</a><i data-icon="chevronRight" data-size="14"></i><span>Apartments</span></nav>
+        <h1 class="h2" id="results-title">Apartments across Thailand</h1>
+        <p class="lead" id="results-sub">Any dates · 2 guests</p>
+      </div>
+      <div class="intro-late">
+        <form class="searchbar searchbar--wide" id="page-search" role="search" aria-label="Search apartments">
+  <button type="button" class="sb-field" data-sb="city" aria-haspopup="dialog" aria-expanded="false">
+    <span class="sb-field__icon"><i data-icon="pin"></i></span>
+    <span class="sb-field__text"><span class="sb-field__label">City</span><span class="sb-field__value is-placeholder">Anywhere in Thailand</span></span>
+    <span class="sb-field__chev"><i data-icon="chevronDown" data-size="18"></i></span>
+  </button>
+  <span class="sb-divider" aria-hidden="true"></span>
+  <button type="button" class="sb-field" data-sb="dates" aria-haspopup="dialog" aria-expanded="false">
+    <span class="sb-field__icon"><i data-icon="calendar"></i></span>
+    <span class="sb-field__text"><span class="sb-field__label">Check-in — Check-out</span><span class="sb-field__value is-placeholder">Add dates</span></span>
+    <span class="sb-field__chev"><i data-icon="chevronDown" data-size="18"></i></span>
+  </button>
+  <span class="sb-divider" aria-hidden="true"></span>
+  <button type="button" class="sb-field" data-sb="guests" aria-haspopup="dialog" aria-expanded="false">
+    <span class="sb-field__icon"><i data-icon="users"></i></span>
+    <span class="sb-field__text"><span class="sb-field__label">Guests</span><span class="sb-field__value">2 guests</span></span>
+    <span class="sb-field__chev"><i data-icon="chevronDown" data-size="18"></i></span>
+  </button>
+  <button type="submit" class="sb-submit" aria-label="Search apartments">
+    <i data-icon="search" data-size="22" data-sw="1.8"></i><span class="sb-submit__label">Search</span>
+  </button>
+</form>
+
+      </div>
+    </div>
+  </section>
+
+  <section class="card results" id="results" aria-label="Results">
+    <div class="container">
+      <div class="toolbar">
+        <div class="chips chips--scroll" id="type-chips" aria-label="Property type"></div>
+        <div class="toolbar__right">
+          <p class="results__count" id="results-count" aria-live="polite"></p>
+          <button type="button" class="sort-btn" id="sort-btn" aria-haspopup="listbox" aria-expanded="false">
+            <span class="muted">Sort:</span> <span class="sort-btn__label">Recommended</span>
+            <i data-icon="chevronDown" data-size="16"></i>
+          </button>
+        </div>
+      </div>
+      <div class="grid-apts" id="results-grid"></div>
+    </div>
+  </section>
+
+  <section class="card card--clip cta-band" aria-labelledby="cta-title">
+    <div class="cta-band__bg media"><img data-photo="v9" data-w="2200" alt="Tropical villa with a pool at twilight" loading="lazy"></div>
+    <div class="cta-band__scrim" aria-hidden="true"></div>
+    <div class="cta-band__content" data-reveal>
+      <span class="eyebrow">Personal selection</span>
+      <h2 class="h2" id="cta-title">Didn’t find the one? <b>We’ll find it.</b></h2>
+      <p class="lead">Many of our apartments are booked privately. Tell us what you need and we’ll send options that aren’t listed yet.</p>
+      <div class="cta-band__actions">
+        <button type="button" class="btn btn--light btn--arrow" data-open="contact">
+          Get a free selection
+          <span class="btn__arrow"><i data-icon="arrow-pair" data-size="18"></i></span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <footer class="card footer" id="contact">
+  <div class="container">
+    <div class="footer__top">
+      <div class="footer__brand">
+        <a href="index.html" class="logo" aria-label="Fortune House — home">
+          <span class="logo__mark"><i data-icon="logo" data-size="20" data-sw="1.8"></i></span>
+          Fortune House
+        </a>
+        <p>Premium apartments and villas for rent across Thailand. Hand-picked, verified and fully serviced.</p>
+        <div class="socials">
+          <a class="icon-btn icon-btn--sm" href="#" aria-label="Instagram"><i data-icon="instagram" data-size="18"></i></a>
+          <a class="icon-btn icon-btn--sm" href="#" aria-label="Telegram"><i data-icon="telegram" data-size="18"></i></a>
+          <a class="icon-btn icon-btn--sm" href="#" aria-label="WhatsApp"><i data-icon="whatsapp" data-size="18"></i></a>
+        </div>
+      </div>
+      <div class="footer__cols">
+        <div class="footer__col">
+          <h4>Explore</h4>
+          <ul>
+            <li><a href="search.html">All apartments</a></li>
+            <li><a href="index.html#why">Why Fortune House</a></li>
+            <li><a href="investors.html">For investors</a></li>
+            <li><a href="#" data-open="contact">Personal selection</a></li>
+          </ul>
+        </div>
+        <div class="footer__col">
+          <h4>Destinations</h4>
+          <ul>
+            <li><a href="search.html?city=phuket">Phuket</a></li>
+            <li><a href="search.html?city=bangkok">Bangkok</a></li>
+            <li><a href="search.html?city=koh-samui">Koh Samui</a></li>
+            <li><a href="search.html?city=pattaya">Pattaya</a></li>
+            <li><a href="search.html?city=chiang-mai">Chiang Mai</a></li>
+            <li><a href="search.html?city=hua-hin">Hua Hin</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer__col">
+        <h4>Contact</h4>
+        <ul>
+          <li><a href="tel:+66000000000">+66 [00] 000 0000</a></li>
+          <li><a href="mailto:hello@fortunehouse.example">hello@fortunehouse.example</a></li>
+          <li class="muted">[Office address], Phuket, Thailand</li>
+          <li class="muted">Every day, 9:00–21:00 (GMT+7)</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer__big" aria-hidden="true">Fortune House</div>
+    <div class="footer__bottom">
+      <span>© <span id="year">2026</span> Fortune House. All rights reserved.</span>
+      <div class="footer__legal">
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="privacy.html#terms">Terms of use</a>
+        <a href="privacy.html#cookies">Cookies</a>
+      </div>
+      <button type="button" class="icon-btn icon-btn--sm" data-to-top aria-label="Back to top"><i data-icon="arrowUp" data-size="18"></i></button>
+    </div>
+  </div>
+</footer>
+
+</main>
+
+<script src="assets/js/data.js"></script>
+<script src="assets/js/main.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Apartment — Fortune House</title>
+<meta name="description" content="Apartment details, photos, amenities and booking.">
+<meta name="theme-color" content="#efefec">
+<link rel="preconnect" href="https://images.unsplash.com">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%230e0e0e'/%3E%3Cpath d='M9.5 23v-9.5L16 8l6.5 5.5V23M13.5 23v-5h5v5' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body data-page="apartment">
+<a class="sr-only" href="#main">Skip to content</a>
+<div class="header-wrap">
+  <header class="header">
+    <a href="index.html" class="logo" aria-label="Fortune House — home">
+      <span class="logo__mark"><i data-icon="logo" data-size="20" data-sw="1.8"></i></span>
+      Fortune House
+    </a>
+    <nav class="nav" aria-label="Main">
+      <a href="search.html" aria-current="page">Apartments</a>
+      <a href="index.html#why">Why us</a>
+      <a href="investors.html">For investors</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <div class="header__actions">
+      <button type="button" class="btn btn--primary btn--sm btn--arrow header__cta" data-open="finder">
+        Choose apartment
+        <span class="btn__arrow"><i data-icon="arrow-pair" data-size="16"></i></span>
+      </button>
+      <button type="button" class="burger" aria-label="Menu" aria-expanded="false" aria-controls="mobile-menu">
+        <span class="burger-lines"><span></span><span></span></span>
+      </button>
+    </div>
+  </header>
+  <div class="mobile-menu" id="mobile-menu">
+    <a class="mm-link" href="search.html">Apartments <i data-icon="arrowRight" data-size="20"></i></a>
+    <a class="mm-link" href="index.html#why">Why us <i data-icon="arrowRight" data-size="20"></i></a>
+    <a class="mm-link" href="investors.html">For investors <i data-icon="arrowRight" data-size="20"></i></a>
+    <a class="mm-link" href="#contact">Contact <i data-icon="arrowRight" data-size="20"></i></a>
+    <button type="button" class="btn btn--primary btn--block btn--arrow" data-open="finder">
+      <span>Choose apartment</span>
+      <span class="btn__arrow"><i data-icon="arrow-pair" data-size="18"></i></span>
+    </button>
+  </div>
+</div>
+<div class="menu-scrim"></div>
+
+
+<main class="page" id="main">
+
+  <section class="card apt-head" id="apt-main" aria-labelledby="apt-title">
+    <div class="container">
+      <div class="intro">
+        <nav class="crumbs" aria-label="Breadcrumb"><a href="index.html">Home</a><i data-icon="chevronRight" data-size="14"></i><a href="search.html">Apartments</a><i data-icon="chevronRight" data-size="14"></i><span data-apt="crumb">Apartment</span></nav>
+        <div class="apt-head__row">
+          <div>
+            <h1 class="apt-title" id="apt-title" data-apt="title">Apartment</h1>
+            <div class="apt-meta" data-apt="meta"></div>
+          </div>
+          <div class="apt-actions">
+            <button type="button" class="btn btn--ghost btn--sm" id="share-btn"><i data-icon="share" data-size="18"></i>Share</button>
+            <button type="button" class="btn btn--ghost btn--sm fav-inline" id="save-btn" aria-pressed="false"><i data-icon="heart" data-size="18"></i><span>Save</span></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="gallery intro-late" id="gallery">
+        <div class="gallery__grid" id="gallery-grid"></div>
+        <div class="gallery__count">
+          <button type="button" class="btn btn--light btn--sm gallery__all" id="gallery-all"><i data-icon="grid" data-size="18"></i>Show all photos</button>
+          <span class="gallery__counter" id="gallery-counter">1 / 1</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="container apt-layout">
+      <div>
+        <div class="apt-section" data-reveal>
+          <div class="facts" data-apt="facts"></div>
+        </div>
+        <div class="apt-section" data-reveal>
+          <h2>About this place</h2>
+          <div data-apt="text"></div>
+        </div>
+        <div class="apt-section" data-reveal>
+          <h2>What’s included</h2>
+          <ul class="amenities" data-apt="amenities"></ul>
+        </div>
+        <div class="apt-section" data-reveal>
+          <h2>Where you’ll be</h2>
+          <div class="map" role="img" aria-label="Map placeholder">
+            <span class="map__road" style="left:-5%;right:-5%;top:58%;height:14px;transform:rotate(-8deg)"></span>
+            <span class="map__road" style="top:-10%;bottom:-10%;left:32%;width:12px;transform:rotate(14deg)"></span>
+            <span class="map__road" style="top:-10%;bottom:-10%;left:74%;width:9px;transform:rotate(-4deg)"></span>
+            <span class="map__pin"><span><i data-icon="home" data-size="20"></i></span></span>
+            <span class="map__label" data-apt="where"></span>
+          </div>
+          <p class="muted" style="margin-top:14px;font-size:14.5px">The exact address is shared after booking is confirmed.</p>
+        </div>
+        <div class="apt-section" data-reveal>
+          <h2>Good to know</h2>
+          <ul class="rules">
+            <li class="rule"><i data-icon="clock"></i>Check-in from 14:00</li>
+            <li class="rule"><i data-icon="clock"></i>Check-out until 12:00</li>
+            <li class="rule"><i data-icon="ban"></i>No smoking inside</li>
+            <li class="rule"><i data-icon="wallet"></i>Refundable deposit on arrival</li>
+          </ul>
+        </div>
+      </div>
+
+      <aside class="booking" id="booking" aria-label="Booking" data-reveal>
+        <div class="booking__price">
+          <span class="price"><b data-apt="price">฿0</b> / night</span>
+          <span class="muted" style="font-size:14px">Utilities included</span>
+        </div>
+        <div class="booking__fields">
+          <div class="booking__dates">
+            <button type="button" class="bk-field" data-bk="in" aria-haspopup="dialog" aria-expanded="false"><span class="bk-field__label">Check-in</span><span class="bk-field__value is-placeholder">Add date</span></button>
+            <button type="button" class="bk-field" data-bk="out" aria-haspopup="dialog" aria-expanded="false"><span class="bk-field__label">Check-out</span><span class="bk-field__value is-placeholder">Add date</span></button>
+          </div>
+          <button type="button" class="bk-field" data-bk="guests" aria-haspopup="dialog" aria-expanded="false"><span class="bk-field__label">Guests</span><span class="bk-field__value">2 guests</span></button>
+        </div>
+        <div class="breakdown is-empty" id="breakdown" aria-live="polite"></div>
+        <button type="button" class="btn btn--primary btn--block btn--arrow" id="book-btn">
+          <span data-bk-label>Check availability</span>
+          <span class="btn__arrow"><i data-icon="arrow-pair" data-size="18"></i></span>
+        </button>
+        <p class="form-error" id="book-error" role="alert" hidden></p>
+        <p class="booking__note">You won’t be charged yet</p>
+      </aside>
+    </div>
+  </section>
+
+  <section class="card section" aria-labelledby="similar-title">
+    <div class="container carousel" id="similar">
+      <div class="section-head">
+        <div class="section-head__title" data-reveal>
+          <span class="eyebrow">You may also like</span>
+          <h2 class="h2" id="similar-title">Similar <b>apartments</b></h2>
+        </div>
+        <div class="carousel-head-actions" data-reveal style="--d:.1s">
+          <a class="link-arrow" href="search.html"><span>View all</span><i data-icon="arrowRight" data-size="18"></i></a>
+        </div>
+      </div>
+      <div class="carousel__frame" data-reveal="fade">
+        <button type="button" class="carousel__side carousel__side--prev" data-prev aria-label="Previous apartments"><i data-icon="chevronLeft" data-size="22" data-sw="1.8"></i></button>
+        <div class="carousel__track" id="similar-track" tabindex="0" aria-label="Similar apartments"></div>
+        <button type="button" class="carousel__side carousel__side--next" data-next aria-label="Next apartments"><i data-icon="chevronRight" data-size="22" data-sw="1.8"></i></button>
+      </div>
+      <div class="carousel__progress" aria-hidden="true"><span></span></div>
+    </div>
+  </section>
+
+  <footer class="card footer" id="contact">
+  <div class="container">
+    <div class="footer__top">
+      <div class="footer__brand">
+        <a href="index.html" class="logo" aria-label="Fortune House — home">
+          <span class="logo__mark"><i data-icon="logo" data-size="20" data-sw="1.8"></i></span>
+          Fortune House
+        </a>
+        <p>Premium apartments and villas for rent across Thailand. Hand-picked, verified and fully serviced.</p>
+        <div class="socials">
+          <a class="icon-btn icon-btn--sm" href="#" aria-label="Instagram"><i data-icon="instagram" data-size="18"></i></a>
+          <a class="icon-btn icon-btn--sm" href="#" aria-label="Telegram"><i data-icon="telegram" data-size="18"></i></a>
+          <a class="icon-btn icon-btn--sm" href="#" aria-label="WhatsApp"><i data-icon="whatsapp" data-size="18"></i></a>
+        </div>
+      </div>
+      <div class="footer__cols">
+        <div class="footer__col">
+          <h4>Explore</h4>
+          <ul>
+            <li><a href="search.html">All apartments</a></li>
+            <li><a href="index.html#why">Why Fortune House</a></li>
+            <li><a href="investors.html">For investors</a></li>
+            <li><a href="#" data-open="contact">Personal selection</a></li>
+          </ul>
+        </div>
+        <div class="footer__col">
+          <h4>Destinations</h4>
+          <ul>
+            <li><a href="search.html?city=phuket">Phuket</a></li>
+            <li><a href="search.html?city=bangkok">Bangkok</a></li>
+            <li><a href="search.html?city=koh-samui">Koh Samui</a></li>
+            <li><a href="search.html?city=pattaya">Pattaya</a></li>
+            <li><a href="search.html?city=chiang-mai">Chiang Mai</a></li>
+            <li><a href="search.html?city=hua-hin">Hua Hin</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer__col">
+        <h4>Contact</h4>
+        <ul>
+          <li><a href="tel:+66000000000">+66 [00] 000 0000</a></li>
+          <li><a href="mailto:hello@fortunehouse.example">hello@fortunehouse.example</a></li>
+          <li class="muted">[Office address], Phuket, Thailand</li>
+          <li class="muted">Every day, 9:00–21:00 (GMT+7)</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer__big" aria-hidden="true">Fortune House</div>
+    <div class="footer__bottom">
+      <span>© <span id="year">2026</span> Fortune House. All rights reserved.</span>
+      <div class="footer__legal">
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="privacy.html#terms">Terms of use</a>
+        <a href="privacy.html#cookies">Cookies</a>
+      </div>
+      <button type="button" class="icon-btn icon-btn--sm" data-to-top aria-label="Back to top"><i data-icon="arrowUp" data-size="18"></i></button>
+    </div>
+  </div>
+</footer>
+
+</main>
+
+<div class="book-bar" id="book-bar">
+  <div class="stack">
+    <span class="price"><b data-apt="price">฿0</b> / night</span>
+    <span class="muted" style="font-size:13px" id="book-bar-sub">Add your dates</span>
+  </div>
+  <button type="button" class="btn btn--primary btn--sm" id="book-bar-btn">Reserve</button>
+</div>
+
+<script src="assets/js/data.js"></script>
+<script src="assets/js/main.js"></script>
+
+</body>
+</html>
