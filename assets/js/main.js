@@ -81,12 +81,33 @@
     wallet: '<rect x="3.5" y="6" width="17" height="13.5" rx="3.5"/><path d="M3.5 10h17M15.5 14.8h1.5"/>',
     chart: '<path d="M4.5 20.5V11M10 20.5V4.5M15.5 20.5v-7M21 20.5H3"/>',
     sparkle: '<path d="m12 3.5 1.9 5.3 5.3 1.9-5.3 1.9L12 18l-1.9-5.4-5.3-1.9 5.3-1.9Z"/>',
-    logo: '<path d="M5.5 19.5v-8.2L12 5l6.5 6.3v8.2"/><path d="M10 19.5V15h4v4.5"/>'
+    logo: '<path d="M5.5 19.5v-8.2L12 5l6.5 6.3v8.2"/><path d="M10 19.5V15h4v4.5"/>',
+    mountain: '<path d="M2.5 19.5 9 8.5l3.6 6 2.4-3.5 6.5 8.5Z"/><path d="m6.9 12 2.1 1.6 1.9-1.5"/>',
+    umbrella: '<path d="M12 4.5a8.5 8.5 0 0 1 8.5 8h-17A8.5 8.5 0 0 1 12 4.5Z"/><path d="M12 12.5v6a2 2 0 0 1-4 0M12 3v1.5"/>',
+    waves: '<path d="M3 8.5c1.5 0 1.5 1 3 1s1.5-1 3-1 1.5 1 3 1 1.5-1 3-1 1.5 1 3 1 1.5-1 3-1M3 13.5c1.5 0 1.5 1 3 1s1.5-1 3-1 1.5 1 3 1 1.5-1 3-1 1.5 1 3 1 1.5-1 3-1M3 18.5c1.5 0 1.5 1 3 1s1.5-1 3-1 1.5 1 3 1 1.5-1 3-1 1.5 1 3 1 1.5-1 3-1"/>',
+    window: '<rect x="2.5" y="6" width="19" height="12" rx="2.5"/><path d="M8.8 6v12M15.2 6v12"/>',
+    bubbles: '<circle cx="8.5" cy="15" r="4.5"/><circle cx="16.5" cy="8.5" r="3"/><circle cx="17" cy="16.5" r="1.7"/><circle cx="9.5" cy="5.8" r="1.5"/>',
+    paw: '<circle cx="6.6" cy="10.4" r="1.7"/><circle cx="10" cy="6.4" r="1.7"/><circle cx="14" cy="6.4" r="1.7"/><circle cx="17.4" cy="10.4" r="1.7"/><path d="M12 11.6c-2.6 0-5 3.4-5 5.6 0 1.6 1.3 2.3 2.6 2.3.9 0 1.6-.5 2.4-.5s1.5.5 2.4.5c1.3 0 2.6-.7 2.6-2.3 0-2.2-2.4-5.6-5-5.6Z"/>',
+    tv: '<rect x="3" y="4.5" width="18" height="12.5" rx="2.5"/><path d="M8.5 20.5h7M12 17v3.5"/>',
+    flame: '<path d="M12 21c-3.6 0-6-2.4-6-5.7 0-3.9 3.4-5.6 4-9.8 2.6 1.5 4.3 4.3 4.3 6.6.9-.5 1.5-1.4 1.7-2.4 1.3 1.4 2 3.4 2 5.3C18 18.6 15.6 21 12 21Z"/>',
+    award: '<circle cx="12" cy="9" r="5.5"/><path d="m8.7 13.3-1.4 7.2L12 18.2l4.7 2.3-1.4-7.2"/>',
+    building: '<path d="M5 20.5v-15A1.5 1.5 0 0 1 6.5 4h7A1.5 1.5 0 0 1 15 5.5v15M15 10h3.5a1.5 1.5 0 0 1 1.5 1.5v9M3.5 20.5h17M8.5 8h3M8.5 11.5h3M8.5 15h3"/>',
+    near: '<path d="M19.5 4.5 13.4 20l-2.5-6.9L4 10.6Z"/>',
+    mail: '<rect x="3.5" y="5.5" width="17" height="13" rx="3"/><path d="m4.5 7.5 7.5 5.8 7.5-5.8"/>',
+    tag: '<path d="M3.5 12.4V5A1.5 1.5 0 0 1 5 3.5h7.4a1.5 1.5 0 0 1 1 .4l6.7 6.7a1.5 1.5 0 0 1 0 2.1l-7.4 7.4a1.5 1.5 0 0 1-2.1 0L3.9 13.4a1.5 1.5 0 0 1-.4-1Z"/><circle cx="8.3" cy="8.3" r="1.4"/>',
+    sliders: '<path d="M4 7h9M17 7h3M4 17h3M11 17h9"/><circle cx="15" cy="7" r="2.2"/><circle cx="9" cy="17" r="2.2"/>'
+  };
+  /* amenity / highlight keys that reuse a drawing */
+  var ICON_ALIAS = {
+    privatepool: 'pool', jacuzzi: 'bubbles', riverview: 'waves', lakeview: 'waves', mountainview: 'mountain',
+    beach: 'umbrella', beachfront: 'umbrella', bbq: 'flame', security: 'shield', bathtub: 'bath',
+    selfcheckin: 'key', pets: 'paw', petfriendly: 'paw', panoramic: 'window', skyline: 'cityview'
   };
 
   function icon(name, size, sw) {
     size = size || 20;
-    return '<svg width="' + size + '" height="' + size + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="' + (sw || 1.6) + '" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + (ICONS[name] || '') + '</svg>';
+    var path = ICONS[name] || ICONS[ICON_ALIAS[name]] || ICONS.check;
+    return '<svg width="' + size + '" height="' + size + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="' + (sw || 1.6) + '" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + path + '</svg>';
   }
   /* "arrow-pair" kept as a name for markup compatibility: one arrow, animated by CSS */
   function btnArrow(size) { return icon('arrowRight', size || 18); }
@@ -145,6 +166,8 @@
 
   var Repo = (function () {
     var list = [], byId = {}, cityById = {}, ready = null;
+    var TIERS = { budget: 'Budget', mid: 'Mid-range', luxury: 'Luxury' }, TIER_KEYS = ['budget', 'mid', 'luxury'];
+    var HL = D.highlights || {};
     D.cities.forEach(function (c) { cityById[c.id] = c; });
 
     function warn(msg) { if (window.console) console.warn('[Fortune House data] ' + msg); }
@@ -168,10 +191,22 @@
         rating: Math.min(5, Math.max(0, num(r.rating, 0))),
         reviews: Math.max(0, Math.round(num(r.reviews, 0))),
         featured: !!r.featured,
+        building: String(r.building || ''),
+        near: String(r.near || ''),
+        tier: TIERS[r.tier] ? r.tier : '',
+        highlights: [],
         photos: [],
         amenities: [],
         text: String(r.text || '')
       };
+      if (!a.tier) {
+        if (r.tier) warn('"' + id + '": unknown tier "' + r.tier + '" — use budget, mid or luxury');
+        var tb = CFG.tiers || {};
+        a.tier = a.price && a.price < (tb.budgetBelow || 1500) ? 'budget' : a.price >= (tb.luxuryFrom || 5500) ? 'luxury' : 'mid';
+      }
+      (Array.isArray(r.highlights) ? r.highlights : []).forEach(function (k) {
+        if (HL[k]) { if (a.highlights.indexOf(k) < 0) a.highlights.push(k); } else warn('"' + id + '": unknown highlight "' + k + '"');
+      });
       if (!cityById[a.city]) warn('"' + id + '": unknown city "' + a.city + '" — add it to CITIES');
       if (!r.title) warn('"' + id + '": missing title');
       if (!a.price) warn('"' + id + '": missing price — shown as "Price on request"');
@@ -209,13 +244,20 @@
       return ready;
     }
 
-    /* q: { city, guests, type, featured, sort, exclude } */
+    /* "Recommended": rating weighted by how many reviews back it, plus a nudge for featured stays */
+    function score(a) {
+      return a.rating * 20 + Math.log(a.reviews + 1) * 2.2 + (a.featured ? 4 : 0) + (a.highlights.length ? 1 : 0);
+    }
+
+    /* q: { city, guests, type, tier, ids, featured, sort, exclude } */
     function search(q) {
       q = q || {};
       var out = list.filter(function (a) {
+        if (q.ids && q.ids.indexOf(a.id) < 0) return false;
         if (q.city && a.city !== q.city) return false;
         if (q.guests && a.guests < q.guests) return false;
         if (q.type && q.type !== 'All' && a.type !== q.type) return false;
+        if (q.tier && q.tier !== 'all' && a.tier !== q.tier) return false;
         if (q.featured && !a.featured) return false;
         if (q.exclude && a.id === q.exclude) return false;
         return true;
@@ -224,6 +266,8 @@
       if (q.sort === 'price-asc') out.sort(function (a, b) { return priceKey(a) - priceKey(b); });
       else if (q.sort === 'price-desc') out.sort(function (a, b) { return (b.price || 0) - (a.price || 0); });
       else if (q.sort === 'rating') out.sort(function (a, b) { return b.rating - a.rating || b.reviews - a.reviews; });
+      else if (q.sort === 'recommended') out.sort(function (a, b) { return score(b) - score(a); });
+      else if (q.sort === 'saved' && q.ids) out.sort(function (a, b) { return q.ids.indexOf(b.id) - q.ids.indexOf(a.id); });
       return out;
     }
 
@@ -233,7 +277,16 @@
       get: function (id) { return byId[id] || null; },
       search: search,
       count: function (q) { return search(q).length; },
-      types: function () { return list.map(function (a) { return a.type; }).filter(function (t, i, arr) { return arr.indexOf(t) === i; }); },
+      /* property types, most common first */
+      types: function () {
+        var n = {};
+        list.forEach(function (a) { n[a.type] = (n[a.type] || 0) + 1; });
+        return Object.keys(n).sort(function (x, y) { return n[y] - n[x] || (x < y ? -1 : 1); });
+      },
+      tiers: function () { return TIER_KEYS.slice(); },
+      tierName: function (k) { return TIERS[k] || ''; },
+      highlight: function (k) { return HL[k] || null; },
+      isGuestFav: function (a) { return a.rating >= 4.95 && a.reviews >= 40; },
       cities: function () { return D.cities.slice(); },
       isCity: function (id) { return !!cityById[id]; },
       cityName: function (id) {
@@ -430,7 +483,7 @@
       for (var e = 0; e < offset; e++) html += '<div class="cal__empty"></div>';
       for (var d = 1; d <= days; d++) {
         var date = new Date(first.getFullYear(), first.getMonth(), d);
-        html += '<button type="button" class="cal__day" data-date="' + toISO(date) + '"' + (date < this.min ? ' disabled' : '') + ' aria-label="' + d + ' ' + MONTHS[first.getMonth()] + '"><span>' + d + '</span></button>';
+        html += '<button type="button" class="cal__day' + (d === 1 ? ' cap-l' : '') + (d === days ? ' cap-r' : '') + '" data-date="' + toISO(date) + '"' + (date < this.min ? ' disabled' : '') + ' aria-label="' + d + ' ' + MONTHS[first.getMonth()] + '"><span>' + d + '</span></button>';
       }
       html += '</div></div>';
     }
@@ -440,6 +493,7 @@
   Calendar.prototype.paint = function () {
     var s = this.start, e = this.end || (s && this.hover > s ? this.hover : '');
     var t = toISO(this.min);
+    this.el.classList.toggle('is-preview', !this.end && !!e);
     $$('.cal__day', this.el).forEach(function (b) {
       var d = b.getAttribute('data-date');
       b.classList.toggle('is-today', d === t);
@@ -663,22 +717,20 @@
     var fCity = $('[data-sb="city"]', bar), fDates = $('[data-sb="dates"]', bar), fGuests = $('[data-sb="guests"]', bar);
     var vCity = $('.sb-field__value', fCity), vDates = $('.sb-field__value', fDates), vGuests = $('.sb-field__value', fGuests);
 
-    var opts = '<div class="opt-list" role="listbox" aria-label="City">' +
-      '<button type="button" class="opt" role="option" data-city=""><span class="opt__icon">' + icon('map', 20) + '</span><span class="opt__text"><span class="opt__title">Anywhere in Thailand</span><span class="opt__sub">' + plural(Repo.count({}), 'apartment') + '</span></span><span class="opt__check">' + icon('check', 14, 2) + '</span></button>' +
+    var opts = '<div class="opt-list opt-list--cities" role="listbox" aria-label="City">' +
+      '<button type="button" class="opt" role="option" data-city=""><span class="opt__icon">' + icon('map', 20) + '</span><span class="opt__text"><span class="opt__title">Anywhere in Thailand</span><span class="opt__sub">' + plural(Repo.count({}), 'stay') + ' · ' + Repo.cities().length + ' cities</span></span><span class="opt__check">' + icon('check', 14, 2) + '</span></button>' +
       Repo.cities().map(function (c) {
-        return '<button type="button" class="opt" role="option" data-city="' + esc(c.id) + '"><span class="opt__icon">' + icon('pin', 20) + '</span><span class="opt__text"><span class="opt__title">' + esc(c.name) + '</span><span class="opt__sub">' + esc(c.note) + ' · ' + plural(Repo.count({ city: c.id }), 'apartment') + '</span></span><span class="opt__check">' + icon('check', 14, 2) + '</span></button>';
+        return '<button type="button" class="opt" role="option" data-city="' + esc(c.id) + '"><span class="opt__icon">' + icon('pin', 20) + '</span><span class="opt__text"><span class="opt__title">' + esc(c.name) + '</span><span class="opt__sub">' + plural(Repo.count({ city: c.id }), 'stay') + ' · ' + esc(c.note) + '</span></span><span class="opt__check">' + icon('check', 14, 2) + '</span></button>';
       }).join('') + '</div>';
-    var popCity = Pop.create('', 'Where to?', opts);
+    var popCity = Pop.create('pop--cities', 'Where to?', opts);
     var popDates = Pop.create('pop--cal', 'When?', '<div class="cal-host"></div><div class="pop__foot"><span class="cal__summary"></span><div class="row gap-8"><button type="button" class="btn btn--sm btn--ghost" data-clear>Clear</button><button type="button" class="btn btn--sm btn--primary" data-done>Done</button></div></div>');
     var popGuests = Pop.create('', 'Who’s coming?', '<div class="pop__pad">' + guestsHTML() + '</div><div class="pop__foot"><span class="cal__summary" data-gsum></span><button type="button" class="btn btn--sm btn--primary" data-done>Done</button></div>');
 
     var twoMonths = function () { return window.innerWidth >= 900 ? 2 : 1; };
     var cal = new Calendar($('.cal-host', popDates), {
       months: twoMonths, start: store.get().checkin, end: store.get().checkout,
-      onChange: function (a, b) {
-        store.set({ checkin: a, checkout: b });
-        if (a && b) setTimeout(function () { if (Pop.current === popDates) Pop.open(popGuests, fGuests); }, 380);
-      }
+      // picking dates never closes the window: Done moves on to the guests step
+      onChange: function (a, b) { store.set({ checkin: a, checkout: b }); }
     });
     popDates._onOpen = function () {
       popDates.classList.toggle('pop--two', twoMonths() === 2);
@@ -696,7 +748,11 @@
     });
     popDates.addEventListener('click', function (ev) {
       if (ev.target.closest('[data-clear]')) { store.set({ checkin: '', checkout: '' }); cal.set('', ''); }
-      if (ev.target.closest('[data-done]')) Pop.close();
+      if (ev.target.closest('[data-done]')) {
+        var s = store.get();
+        if (s.checkin && !s.checkout) { nudge($('.cal__summary', popDates)); return; }
+        if (s.checkin && s.checkout) Pop.open(popGuests, fGuests); else Pop.close();
+      }
     });
     bindGuests(popGuests, store);
     popGuests.addEventListener('click', function (ev) { if (ev.target.closest('[data-done]')) Pop.close(); });
@@ -899,6 +955,13 @@
     return '<span class="price"><b>' + money(a.price) + '</b> / night</span>';
   }
 
+  function hlChip(k, size, tag) {
+    var h = Repo.highlight(k);
+    if (!h) return '';
+    tag = tag || 'li';
+    return '<' + tag + ' class="hl hl--' + esc(h.tone || 'neutral') + '">' + icon(h.icon || k, size || 15, 1.8) + esc(h.label) + '</' + tag + '>';
+  }
+
   function cardHTML(a, opts) {
     opts = opts || {};
     var href = 'apartment.html?id=' + encodeURIComponent(a.id);
@@ -909,19 +972,27 @@
       return '<div class="apt-media__slide media">' + (src ? '<img ' + (i === 0 ? 'src' : 'data-src') + '="' + esc(src) + '" alt="' + esc(a.title) + (i ? ' — photo ' + (i + 1) : '') + '" loading="lazy" decoding="async" draggable="false">' : '') + '</div>';
     }).join('');
     var many = photos.length > 1;
+    var where = esc(a.type) + (a.area ? ' · ' + esc(a.area) : '') + ', ' + esc(Repo.cityName(a.city));
+    var specs = '<li class="spec">' + icon('bed', 16) + (a.beds ? plural(a.beds, 'bedroom') : 'Studio') + '</li>' +
+      '<li class="spec">' + icon('user', 16) + plural(a.guests, 'guest') + '</li>' +
+      (a.size ? '<li class="spec">' + icon('area', 16) + a.size + ' m²</li>' : '');
+    var hl = a.highlights.slice(0, 2).map(function (k) { return hlChip(k, 15); }).join('');
     return '<article class="apt-card' + (opts.boxed ? ' apt-card--boxed' : '') + '"' + (opts.i !== undefined ? ' style="--i:' + opts.i + '"' : '') + '>' +
       '<div class="apt-media" data-gallery data-index="0" data-photos="' + photos.length + '">' +
       '<div class="apt-media__strip">' + slides + '</div>' +
       (many ? '<button type="button" class="apt-media__nav apt-media__nav--prev" data-slide="-1" aria-label="Previous photo" disabled>' + icon('chevronLeft', 18, 2) + '</button>' +
         '<button type="button" class="apt-media__nav apt-media__nav--next" data-slide="1" aria-label="Next photo">' + icon('chevronRight', 18, 2) + '</button>' +
         (photos.length <= 8 ? '<div class="apt-media__dots" aria-hidden="true">' + photos.map(function (p, i) { return '<span' + (i === 0 ? ' class="is-active"' : '') + '></span>'; }).join('') + '</div>' : '') : '') +
-      '<div class="apt-card__badges"><span class="badge">' + esc(Repo.cityName(a.city)) + '</span></div>' +
+      (Repo.isGuestFav(a) ? '<div class="apt-card__badges"><span class="badge">' + icon('award', 15, 1.8) + 'Guest favourite</span></div>' : '') +
       '<button type="button" class="fav" data-fav="' + esc(a.id) + '" aria-pressed="' + isFav + '" aria-label="Save ' + esc(a.title) + '">' + icon('heart', 20) + '</button>' +
       '</div>' +
       '<div class="apt-card__body">' +
-      '<div class="apt-card__top"><div><h3 class="apt-card__title"><a class="apt-card__link" href="' + href + '"' + linkAttrs() + '>' + esc(a.title) + '</a></h3><p class="apt-card__loc">' + esc(a.area) + (a.area ? ' · ' : '') + esc(a.type) + '</p></div>' +
-      (a.rating ? '<span class="rating">' + icon('star', 15) + a.rating.toFixed(2) + '</span>' : '') + '</div>' +
-      '<ul class="specs"><li class="spec">' + icon('bed', 16) + plural(a.beds, 'bed') + '</li><li class="spec">' + icon('user', 16) + 'up to ' + a.guests + '</li>' + (a.size ? '<li class="spec">' + icon('area', 16) + a.size + ' m²</li>' : '') + '</ul>' +
+      '<div class="apt-card__top"><p class="apt-card__loc">' + where + '</p>' +
+      (a.rating ? '<span class="rating">' + icon('star', 14) + a.rating.toFixed(2) + (a.reviews ? '<span class="rating__n">(' + a.reviews + ')</span>' : '') + '</span>' : '') + '</div>' +
+      '<h3 class="apt-card__title"><a class="apt-card__link" href="' + href + '"' + linkAttrs() + '>' + esc(a.title) + '</a></h3>' +
+      (a.near ? '<p class="apt-card__near">' + icon('near', 14) + '<span>' + esc(a.near) + '</span></p>' : '') +
+      '<ul class="specs">' + specs + '</ul>' +
+      (hl ? '<ul class="hl-chips" aria-label="Highlights">' + hl + '</ul>' : '') +
       '<div class="apt-card__foot">' + priceHTML(a, opts.nights) +
       '<a class="btn btn--sm btn--soft btn--arrow see-more" href="' + href + '"' + linkAttrs() + '>See more<span class="btn__arrow">' + btnArrow(16) + '</span></a>' +
       '</div></div></article>';
@@ -964,7 +1035,28 @@
         x.setAttribute('aria-pressed', i > -1 ? 'false' : 'true');
         x.classList.remove('pulse'); void x.offsetWidth; x.classList.add('pulse');
       });
+      syncFavCount(true);
       toast(i > -1 ? 'Removed from saved' : 'Saved to your list');
+      favSubs.forEach(function (f) { f(id, i < 0); });
+    });
+    // another tab changed the list
+    window.addEventListener('storage', function (ev) {
+      if (ev.key !== 'fh-favs') return;
+      favs.length = 0;
+      (lsGet('fh-favs') || []).forEach(function (x) { if (typeof x === 'string') favs.push(x); });
+      $$('[data-fav]').forEach(function (x) { x.setAttribute('aria-pressed', favs.indexOf(x.getAttribute('data-fav')) > -1 ? 'true' : 'false'); });
+      syncFavCount(false);
+      favSubs.forEach(function (f) { f(null); });
+    });
+  }
+  var favSubs = [];
+  /* header "Saved" counters */
+  function syncFavCount(bump) {
+    var n = favs.filter(function (id) { return Repo.get(id); }).length;
+    $$('[data-fav-count]').forEach(function (el) {
+      el.textContent = n > 99 ? '99+' : String(n);
+      el.classList.toggle('is-empty', !n);
+      if (bump && n) { el.classList.remove('bump'); void el.offsetWidth; el.classList.add('bump'); }
     });
   }
   function renderCards(container, items, opts) {
@@ -1081,7 +1173,7 @@
   function pageHome() {
     var track = $('#featured-track');
     if (track) {
-      var items = Repo.search({ featured: true });
+      var items = Repo.search({ featured: true, sort: 'recommended' });
       if (!items.length) items = Repo.all().slice(0, 8);
       renderCards(track, items, {});
       initCarousel($('#featured'));
@@ -1099,16 +1191,46 @@
     if ('children' in p) patch.children = p.children;
     Search.set(patch, true);
 
+    var PAGE = 12;
     var types = Repo.types();
-    var SORTS = { recommended: 'Recommended', 'price-asc': 'Price: low to high', 'price-desc': 'Price: high to low', rating: 'Top rated' };
+    var TIER_HINT = (function () {
+      var t = CFG.tiers || {}, lo = t.budgetBelow || 1500, hi = t.luxuryFrom || 5500;
+      return { budget: 'under ' + money(lo) + ' a night', mid: money(lo) + '–' + money(hi).replace('฿', '') + ' a night', luxury: 'from ' + money(hi) + ' a night' };
+    })();
+    var SORTS = { recommended: 'Recommended', 'price-asc': 'Price: low to high', 'price-desc': 'Price: high to low', rating: 'Top rated', saved: 'Recently saved' };
     var state = {
+      saved: p.saved === '1',
       type: types.indexOf(p.type) > -1 ? p.type : 'All',
-      sort: SORTS[p.sort] ? p.sort : 'recommended'
+      tier: Repo.tierName(p.tier) ? p.tier : 'all',
+      sort: SORTS[p.sort] ? p.sort : (p.saved === '1' ? 'saved' : 'recommended'),
+      limit: PAGE
     };
+    if (state.sort === 'saved' && !state.saved) state.sort = 'recommended';
+
     var grid = $('#results-grid'), count = $('#results-count'), title = $('#results-title'), sub = $('#results-sub');
-    var chipsBox = $('#type-chips');
+    var chipsBox = $('#type-chips'), seg = $('#tier-seg'), filters = $('#filters');
+    var more = $('#results-more'), moreBtn = $('#more-btn'), moreText = $('#more-text'), moreBar = $('#more-bar');
+    var crumb = $('#results-crumb');
+
+    // budget segments
+    seg.innerHTML = '<span class="seg__thumb" aria-hidden="true"></span>' + [['all', 'Any budget']].concat(Repo.tiers().map(function (k) { return [k, Repo.tierName(k)]; })).map(function (t) {
+      return '<button type="button" class="seg__opt" role="radio" data-tier="' + t[0] + '" aria-checked="false"' + (TIER_HINT[t[0]] ? ' title="' + esc(TIER_HINT[t[0]]) + '"' : '') + '>' + (t[0] === 'all' ? '<span class="seg__long">Any budget</span><span class="seg__short">Any</span>' : esc(t[1])) + '</button>';
+    }).join('');
+    var thumb = $('.seg__thumb', seg);
+    function placeThumb(instant) {
+      var on = $('[aria-checked="true"]', seg);
+      if (!on) return;
+      if (instant) thumb.style.transition = 'none';
+      thumb.style.width = on.offsetWidth + 'px';
+      thumb.style.transform = 'translateX(' + on.offsetLeft + 'px)';
+      if (instant) { void thumb.offsetWidth; thumb.style.transition = ''; }
+    }
+    window.addEventListener('resize', function () { placeThumb(true); });
+    if (doc.fonts && doc.fonts.ready) doc.fonts.ready.then(function () { placeThumb(true); });
+
+    // property types
     chipsBox.innerHTML = ['All'].concat(types).map(function (t) {
-      return '<button type="button" class="chip" data-type="' + esc(t) + '" aria-pressed="' + (t === state.type) + '">' + (t === 'All' ? 'All types' : esc(t) + 's') + '</button>';
+      return '<button type="button" class="chip" data-type="' + esc(t) + '" aria-pressed="false">' + (t === 'All' ? 'All types' : esc(t) + 's') + '<span class="chip__n" data-n></span></button>';
     }).join('');
 
     var sortBtn = $('#sort-btn');
@@ -1121,54 +1243,115 @@
       var o = ev.target.closest('[data-sort]');
       if (!o) return;
       state.sort = o.getAttribute('data-sort');
+      state.limit = PAGE;
       Pop.close();
       render(true);
     });
     chipsBox.addEventListener('click', function (ev) {
       var c = ev.target.closest('[data-type]');
-      if (!c) return;
+      if (!c || c.disabled) return;
       state.type = c.getAttribute('data-type');
+      state.limit = PAGE;
       render(true);
+    });
+    seg.addEventListener('click', function (ev) {
+      var o = ev.target.closest('[data-tier]');
+      if (!o) return;
+      state.tier = o.getAttribute('data-tier');
+      state.limit = PAGE;
+      render(true);
+    });
+    moreBtn.addEventListener('click', function () {
+      state.limit += PAGE;
+      render(false, true);
     });
 
     function syncURL() {
-      try { history.replaceState(null, '', 'search.html?' + searchQuery(Search.get(), { type: state.type !== 'All' ? state.type : '', sort: state.sort !== 'recommended' ? state.sort : '' })); } catch (e) { /* some browsers block this on file:// */ }
+      var extra = state.saved ? { saved: '1', sort: state.sort !== 'saved' ? state.sort : '' }
+        : { type: state.type !== 'All' ? state.type : '', tier: state.tier !== 'all' ? state.tier : '', sort: state.sort !== 'recommended' ? state.sort : '' };
+      try { history.replaceState(null, '', 'search.html?' + searchQuery(Search.get(), extra)); } catch (e) { /* some browsers block this on file:// */ }
     }
 
-    var first = true, swapTimer;
-    function render(animate) {
+    function query(s, over) {
+      var q = state.saved ? { ids: favs.slice(), sort: state.sort }
+        : { city: s.city, guests: s.adults + s.children, type: state.type, tier: state.tier, sort: state.sort };
+      if (over) for (var k in over) q[k] = over[k];
+      return q;
+    }
+
+    var first = true, swapTimer, shown = 0;
+    function render(animate, append) {
       var s = Search.get();
       var nights = nightsBetween(s.checkin, s.checkout);
-      var list = Repo.search({ city: s.city, guests: s.adults + s.children, type: state.type, sort: state.sort });
+      var list = Repo.search(query(s));
+      var page = list.slice(0, state.limit);
 
-      $$('[data-type]', chipsBox).forEach(function (x) { x.setAttribute('aria-pressed', x.getAttribute('data-type') === state.type ? 'true' : 'false'); });
+      filters.hidden = state.saved;
+      $$('[data-sort="saved"]', popSort).forEach(function (o) { o.hidden = !state.saved; });
+      $$('[data-tier]', seg).forEach(function (x) { x.setAttribute('aria-checked', x.getAttribute('data-tier') === state.tier ? 'true' : 'false'); });
+      placeThumb(first);
+      $$('[data-type]', chipsBox).forEach(function (x) {
+        var t = x.getAttribute('data-type');
+        var n = Repo.count(query(s, { type: t, sort: '' }));
+        x.setAttribute('aria-pressed', t === state.type ? 'true' : 'false');
+        $('[data-n]', x).textContent = n;
+        x.disabled = !n && t !== state.type;
+      });
       $('.sort-btn__label', sortBtn).textContent = SORTS[state.sort];
       $$('[data-sort]', popSort).forEach(function (o) { o.setAttribute('aria-selected', o.getAttribute('data-sort') === state.sort ? 'true' : 'false'); });
-      title.textContent = s.city ? 'Apartments in ' + Repo.cityName(s.city) : 'Apartments across Thailand';
-      sub.textContent = (s.checkin && s.checkout ? fmtRange(s.checkin, s.checkout) + ' · ' + plural(nights, 'night') : 'Any dates') + ' · ' + guestsLabel(s);
-      count.innerHTML = '<b>' + list.length + '</b> ' + (list.length === 1 ? 'stay' : 'stays') + ' found';
+
+      if (state.saved) {
+        title.textContent = 'Saved apartments';
+        sub.textContent = list.length ? plural(list.length, 'apartment') + ' on your list · saved on this device' : 'Tap the heart on any apartment to keep it here';
+        count.innerHTML = '<b>' + list.length + '</b> saved';
+        if (crumb) crumb.textContent = 'Saved';
+      } else {
+        title.textContent = s.city ? 'Apartments in ' + Repo.cityName(s.city) : 'Apartments across Thailand';
+        sub.textContent = (s.checkin && s.checkout ? fmtRange(s.checkin, s.checkout) + ' · ' + plural(nights, 'night') : 'Any dates') + ' · ' + guestsLabel(s);
+        count.innerHTML = '<b>' + list.length + '</b> ' + (state.tier !== 'all' ? Repo.tierName(state.tier).toLowerCase() + ' ' : '') + (list.length === 1 ? 'stay' : 'stays') +
+          (state.tier !== 'all' ? '<span class="results__hint"> · ' + TIER_HINT[state.tier] + '</span>' : ' found');
+        if (crumb) crumb.textContent = 'Apartments';
+      }
       doc.title = title.textContent + ' — Fortune House';
 
-      var swap = function () {
-        if (list.length) renderCards(grid, list, { nights: nights, boxed: true });
-        else grid.innerHTML = '<div class="empty" style="grid-column:1/-1"><div class="empty__icon">' + icon('search', 26) + '</div><h3 class="h3">No apartments match yet</h3><p class="muted" style="max-width:360px">Try another city, fewer guests or a different property type.</p><button type="button" class="btn btn--primary btn--sm" data-reset>Reset filters</button></div>';
+      var paint = function () {
+        if (append && shown && list.length) {
+          var html = page.slice(shown).map(function (a, i) { return cardHTML(a, { nights: nights, boxed: true, i: i }); }).join('');
+          var tmp = doc.createElement('div'); tmp.innerHTML = html;
+          var added = Array.prototype.slice.call(tmp.children);
+          added.forEach(function (c) { grid.appendChild(c); });
+          added.forEach(function (c) { setupImages(c); });
+        } else if (list.length) renderCards(grid, page, { nights: nights, boxed: true });
+        else if (state.saved) grid.innerHTML = '<div class="empty" style="grid-column:1/-1"><div class="empty__icon">' + icon('heart', 26) + '</div><h3 class="h3">No saved apartments yet</h3><p class="muted" style="max-width:380px">Tap the heart on any apartment and it will wait for you here — on this device, no sign-up needed.</p><a class="btn btn--primary btn--sm btn--arrow" href="search.html">Browse apartments<span class="btn__arrow">' + btnArrow(16) + '</span></a></div>';
+        else grid.innerHTML = '<div class="empty" style="grid-column:1/-1"><div class="empty__icon">' + icon('search', 26) + '</div><h3 class="h3">No apartments match yet</h3><p class="muted" style="max-width:380px">Try another city, a different budget or fewer guests — or ask us for a personal selection.</p><div class="row gap-8" style="flex-wrap:wrap;justify-content:center"><button type="button" class="btn btn--primary btn--sm" data-reset>Reset filters</button><button type="button" class="btn btn--ghost btn--sm" data-open="contact">Ask an expert</button></div></div>';
+        shown = list.length ? page.length : 0;
+        more.hidden = list.length <= page.length;
+        moreText.textContent = 'Showing ' + page.length + ' of ' + list.length;
+        moreBar.style.width = (list.length ? page.length / list.length * 100 : 0) + '%';
         grid.classList.remove('is-updating');
       };
       clearTimeout(swapTimer);
-      if (animate && !first && !reduceMotion) { grid.classList.add('is-updating'); swapTimer = setTimeout(swap, 220); }
-      else swap();
+      if (animate && !first && !reduceMotion && !append) { grid.classList.add('is-updating'); swapTimer = setTimeout(paint, 220); }
+      else paint();
       first = false;
       syncURL();
     }
 
     grid.addEventListener('click', function (ev) {
       if (!ev.target.closest('[data-reset]')) return;
-      state.type = 'All';
+      state.type = 'All'; state.tier = 'all'; state.limit = PAGE;
       Search.set({ city: '', adults: 1, children: 0 });
       render(true);
     });
+    // on the saved list, removing a heart takes the card away
+    favSubs.push(function () {
+      if (!state.saved) return;
+      setTimeout(function () { render(true); }, 260);
+    });
 
     initSearchBar($('#page-search'), Search, function () {
+      if (state.saved) { state.saved = false; state.sort = 'recommended'; }
+      state.limit = PAGE;
       render(true);
       var r = $('#results');
       if (r && r.getBoundingClientRect().top > window.innerHeight * 0.6) r.scrollIntoView({ behavior: smooth() });
@@ -1176,33 +1359,53 @@
     render(false);
   }
 
+  function nudge(el) {
+    if (!el) return;
+    el.classList.remove('nudge'); void el.offsetWidth; el.classList.add('nudge');
+    clearTimeout(el._nudgeT);
+    el._nudgeT = setTimeout(function () { el.classList.remove('nudge'); }, 1400);
+  }
+  var EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+
   function pageApartment() {
     var a = Repo.get(params().id);
     if (!a) {
       doc.title = 'Apartment not found — Fortune House';
       $('#apt-main').innerHTML = '<div class="container"><div class="empty" style="padding:96px 16px"><div class="empty__icon">' + icon('home', 26) + '</div><h1 class="h3">This apartment is no longer available</h1><p class="muted" style="max-width:380px">It may have been booked out or removed. Have a look at similar places instead.</p><a class="btn btn--primary btn--arrow" href="search.html">Browse apartments<span class="btn__arrow">' + btnArrow() + '</span></a></div></div>';
       var simTrack = $('#similar-track');
-      if (simTrack) { renderCards(simTrack, Repo.all().slice(0, 7), {}); initCarousel($('#similar')); }
+      if (simTrack) { renderCards(simTrack, Repo.search({ sort: 'recommended' }).slice(0, 8), {}); initCarousel($('#similar')); }
       var bb = $('#book-bar'); if (bb) bb.remove();
       return;
     }
-    doc.title = a.title + ' — Fortune House';
+    var cityName = Repo.cityName(a.city);
+    doc.title = a.title + ' — ' + cityName + ' — Fortune House';
+    var md = $('meta[name="description"]');
+    if (md) md.setAttribute('content', (a.text || a.title).slice(0, 155));
     var set = function (sel, html) { $$(sel).forEach(function (el) { el.innerHTML = html; }); };
     set('[data-apt="title"]', esc(a.title));
     set('[data-apt="crumb"]', esc(a.title));
     set('[data-apt="meta"]',
       (a.rating ? '<span class="rating">' + icon('star', 15) + a.rating.toFixed(2) + ' <span class="muted" style="font-weight:400">· ' + plural(a.reviews, 'review') + '</span></span>' : '') +
-      '<span class="row gap-8">' + icon('pin', 17) + esc(a.area) + (a.area ? ', ' : '') + esc(Repo.cityName(a.city)) + '</span>' +
-      '<span class="row gap-8">' + icon('home', 17) + esc(a.type) + '</span>');
+      '<span class="row gap-8">' + icon('pin', 17) + esc(a.area) + (a.area ? ', ' : '') + esc(cityName) + '</span>' +
+      '<span class="row gap-8">' + icon('home', 17) + esc(a.type) + '</span>' +
+      (a.building ? '<span class="row gap-8">' + icon('building', 17) + esc(a.building) + '</span>' : ''));
+    var hlBox = $('[data-apt="highlights"]');
+    if (hlBox) {
+      var chips = (Repo.isGuestFav(a) ? '<li class="hl hl--ink">' + icon('award', 15, 1.8) + 'Guest favourite</li>' : '') + a.highlights.map(function (k) { return hlChip(k, 15); }).join('');
+      if (chips) hlBox.innerHTML = chips; else hlBox.remove();
+    }
     set('[data-apt="text"]', (a.text ? '<p>' + esc(a.text) + '</p>' : '') + '<p style="margin-top:14px">Every Fortune House apartment is inspected in person before it is listed, professionally cleaned between stays and backed by our local team. Linen, towels, Wi-Fi and utilities are included in the price.</p>');
     set('[data-apt="facts"]',
-      [[a.beds, 'Bedrooms', 'bed'], [a.baths, 'Bathrooms', 'bath'], [a.guests, 'Guests max', 'users'], [a.size ? a.size + ' m²' : '—', 'Living space', 'area']].map(function (f) {
+      [a.beds ? [a.beds, plural(a.beds, 'Bedroom').replace(/^\d+ /, ''), 'bed'] : ['Studio', 'Layout', 'bed'],
+        [a.baths, plural(a.baths, 'Bathroom').replace(/^\d+ /, ''), 'bath'], [a.guests, 'Guests max', 'users'], [a.size ? a.size + ' m²' : '—', 'Living space', 'area']].map(function (f) {
         return '<div class="fact">' + icon(f[2], 22) + '<div><div class="fact__val">' + f[0] + '</div><div class="fact__label">' + f[1] + '</div></div></div>';
       }).join(''));
     set('[data-apt="amenities"]', a.amenities.map(function (k) {
       return '<li class="amenity"><span class="amenity__icon">' + icon(k, 20) + '</span>' + esc(D.amenities[k]) + '</li>';
     }).join(''));
-    set('[data-apt="where"]', esc(a.area) + (a.area ? ', ' : '') + esc(Repo.cityName(a.city)));
+    set('[data-apt="where"]', (a.building ? esc(a.building) + ' · ' : '') + esc(a.area) + (a.area ? ', ' : '') + esc(cityName));
+    var nearEl = $('[data-apt="near"]');
+    if (nearEl) { if (a.near) nearEl.innerHTML = icon('near', 16) + '<span>' + esc(a.near) + '</span>'; else nearEl.remove(); }
     set('[data-apt="price"]', a.price ? money(a.price) : 'On request');
 
     // gallery
@@ -1238,30 +1441,41 @@
     var fields = $('.booking__fields', bk);
     var popDates = Pop.create('pop--cal', 'Select dates', '<div class="cal-host"></div><div class="pop__foot"><span class="cal__summary"></span><div class="row gap-8"><button type="button" class="btn btn--sm btn--ghost" data-clear>Clear</button><button type="button" class="btn btn--sm btn--primary" data-done>Done</button></div></div>');
     var twoMonths = function () { return window.innerWidth >= 900 ? 2 : 1; };
+    // the calendar never closes on its own: the guest picks both dates, then presses Done
     var cal = new Calendar($('.cal-host', popDates), {
       months: twoMonths, start: Booking.get().checkin, end: Booking.get().checkout,
-      onChange: function (x, y) {
-        Booking.set({ checkin: x, checkout: y });
-        if (x && y) setTimeout(function () { if (Pop.current === popDates) Pop.close(); }, 450);
-      }
+      onChange: function (x, y) { Booking.set({ checkin: x, checkout: y }); }
     });
     popDates._alignTo = fields;
     popDates._alignRight = true;
     popDates._onOpen = function () { popDates.classList.toggle('pop--two', twoMonths() === 2); cal.set(Booking.get().checkin, Booking.get().checkout); };
+    var popG = Pop.create('', 'Who’s coming?', '<div class="pop__pad">' + guestsHTML() + '<p class="muted" style="font-size:13px;padding:10px 0 4px">This apartment hosts up to ' + plural(a.guests, 'guest') + '.</p></div><div class="pop__foot"><span class="cal__summary" data-gsum></span><button type="button" class="btn btn--sm btn--primary" data-done>Done</button></div>');
+    popG._alignTo = fields;
+    popG._alignRight = true;
+    bindGuests(popG, Booking, function () { return a.guests; });
+
+    var bookBtn = $('#book-btn'), bookErr = $('#book-error'), bookNote = $('#book-note');
     popDates.addEventListener('click', function (ev) {
       if (ev.target.closest('[data-clear]')) { Booking.set({ checkin: '', checkout: '' }); cal.set('', ''); }
-      if (ev.target.closest('[data-done]')) Pop.close();
+      if (ev.target.closest('[data-done]')) {
+        var s = Booking.get();
+        if (s.checkin && !s.checkout) { nudge($('.cal__summary', popDates)); return; }
+        if (s.checkin && s.checkout) Pop.open(popG, fG); else Pop.close();
+      }
     });
-    var popG = Pop.create('', 'Guests', '<div class="pop__pad">' + guestsHTML() + '<p class="muted" style="font-size:13px;padding:10px 0 4px">This apartment hosts up to ' + plural(a.guests, 'guest') + '.</p></div><div class="pop__foot"><span></span><button type="button" class="btn btn--sm btn--primary" data-done>Done</button></div>');
-    popG.addEventListener('click', function (ev) { if (ev.target.closest('[data-done]')) Pop.close(); });
-    bindGuests(popG, Booking, function () { return a.guests; });
+    popG.addEventListener('click', function (ev) {
+      if (!ev.target.closest('[data-done]')) return;
+      Pop.close();
+      var s = Booking.get();
+      if (s.checkin && s.checkout) setTimeout(function () { nudge(bookBtn); }, 250);
+    });
 
     fIn.addEventListener('click', function () { Pop.toggle(popDates, fIn); });
     fOut.addEventListener('click', function () { Pop.toggle(popDates, fOut); });
     fG.addEventListener('click', function () { Pop.toggle(popG, fG); });
 
     var cleaning = Math.round(a.price * (CFG.fees.cleaningShare || 0) / 100) * 100;
-    var bd = $('#breakdown'), label = $('[data-bk-label]', bk), barSub = $('#book-bar-sub');
+    var bd = $('#breakdown'), label = $('[data-bk-label]', bk), barSub = $('#book-bar-sub'), barBtn = $('#book-bar-btn');
     function quote(s) {
       var n = nightsBetween(s.checkin, s.checkout);
       if (!n || !a.price) return null;
@@ -1269,10 +1483,12 @@
       return { nights: n, base: base, cleaning: cleaning, fee: fee, total: base + cleaning + fee };
     }
     Booking.on(function (s) {
+      var ready = !!(s.checkin && s.checkout);
       setValue($('.bk-field__value', fIn), s.checkin ? fmtDay(s.checkin) : '', 'Add date');
       setValue($('.bk-field__value', fOut), s.checkout ? fmtDay(s.checkout) : '', 'Add date');
       setValue($('.bk-field__value', fG), guestsLabel(s), '');
       $('.cal__summary', popDates).innerHTML = calSummary(s.checkin, s.checkout);
+      $('[data-gsum]', popG).textContent = guestsLabel(s);
       var q = quote(s);
       if (q) {
         bd.innerHTML = '<div class="breakdown__row"><span>' + money(a.price) + ' × ' + plural(q.nights, 'night') + '</span><span>' + money(q.base) + '</span></div>' +
@@ -1281,39 +1497,95 @@
           '<div class="breakdown__row breakdown__row--total"><span>Total</span><span>' + money(q.total) + '</span></div>';
         bd.classList.remove('is-empty');
       } else bd.classList.add('is-empty');
-      label.textContent = s.checkin && s.checkout ? 'Request to book' : 'Check availability';
-      if (barSub) barSub.textContent = s.checkin && s.checkout ? fmtRange(s.checkin, s.checkout) + ' · ' + guestsLabel(s) : 'Add your dates';
+      label.textContent = ready ? 'Request to book' : 'Check availability';
+      if (barBtn) barBtn.textContent = ready ? 'Request to book' : 'Check availability';
+      if (barSub) barSub.textContent = ready ? fmtRange(s.checkin, s.checkout) + ' · ' + guestsLabel(s) : 'Add your dates';
     });
 
-    var done = Modal.build('booked', { title: 'Request sent', size: 'sm', body: '<div class="success"><div class="success__icon"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></div><h3 class="h3" data-bsum></h3><p class="muted">We’re confirming availability with the owner and will reply within one hour. Nothing is charged until you confirm.</p><button type="button" class="btn btn--primary" data-close style="margin-top:8px">Great, thanks</button></div>' });
-    var bookBtn = $('#book-btn'), bookErr = $('#book-error');
-    bookBtn.addEventListener('click', function () {
-      var s = Booking.get();
-      if (!(s.checkin && s.checkout)) { Pop.open(popDates, fIn); return; }
-      if (bookBtn.disabled) return;
-      if (bookErr) bookErr.hidden = true;
-      setLoading(bookBtn, true);
-      var q = quote(s);
+    // contact step: "Please, leave your contact information"
+    var okIcon = '<div class="success__icon"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></div>';
+    var REQ_TITLE = 'Please, leave your contact information';
+    var req = Modal.build('book-request', {
+      title: REQ_TITLE, size: 'sm',
+      body: '<form class="book-form" novalidate>' +
+        '<p class="modal__sub">We’ll confirm the apartment’s availability and get back to you within an hour.</p>' +
+        '<div class="book-sum"><div class="book-sum__img media"><img alt=""></div><div class="book-sum__text"><span class="book-sum__title">' + esc(a.title) + '</span><span class="book-sum__meta" data-rs-meta></span></div><span class="book-sum__total" data-rs-total></span></div>' +
+        '<label class="sr-only" for="rq-email">Email</label>' +
+        '<div class="input-icon"><span class="input-icon__i">' + icon('mail', 20) + '</span><input class="input" id="rq-email" name="email" type="email" inputmode="email" autocomplete="email" autocapitalize="off" spellcheck="false" placeholder="example@gmail.com" required data-autofocus></div>' +
+        '<p class="field-error" data-rq-err hidden>Please enter a valid email, like name@gmail.com</p>' +
+        '<p class="form-error" data-rq-fail role="alert" hidden></p>' +
+        '<button type="submit" class="btn btn--primary btn--block btn--arrow"><span>Send request</span><span class="btn__arrow">' + btnArrow() + '</span></button>' +
+        '<p class="form-note">You won’t be charged yet. By sending, you agree to our <a href="privacy.html">Privacy Policy</a>.</p>' +
+        '</form>' +
+        '<div class="success" hidden>' + okIcon + '<h3 class="h3">Request sent</h3><p class="muted" data-rq-done></p><button type="button" class="btn btn--primary" data-close style="margin-top:8px">Great, thanks</button></div>'
+    });
+    var rqForm = $('form', req), rqEmail = $('#rq-email', req), rqErr = $('[data-rq-err]', req), rqFail = $('[data-rq-fail]', req);
+    var rqSubmit = $('button[type=submit]', rqForm), rqOk = $('.success', req);
+    var rqImg = $('.book-sum__img img', req);
+    req._onOpen = function () {
+      var s = Booking.get(), q = quote(s);
+      if (!rqImg.getAttribute('src') && a.photos[0]) { rqImg.src = Repo.photo(a.photos[0], 240); setupImages(req); }
+      $('[data-rs-meta]', req).textContent = fmtRange(s.checkin, s.checkout) + ' · ' + plural(nightsBetween(s.checkin, s.checkout), 'night') + ' · ' + guestsLabel(s);
+      $('[data-rs-total]', req).textContent = q ? money(q.total) : '';
+      var saved = lsGet('fh-contact');
+      if (!rqEmail.value && saved && typeof saved.email === 'string') rqEmail.value = saved.email;
+    };
+    req._onClose = function () {
+      rqForm.hidden = false; rqOk.hidden = true; rqErr.hidden = true; rqFail.hidden = true;
+      rqEmail.classList.remove('is-invalid');
+      $('.modal__title', req).textContent = REQ_TITLE;
+    };
+    rqEmail.addEventListener('input', function () { rqEmail.classList.remove('is-invalid'); rqErr.hidden = true; });
+    rqForm.addEventListener('submit', function (ev) {
+      ev.preventDefault();
+      if (rqSubmit.disabled) return;
+      rqFail.hidden = true;
+      var email = rqEmail.value.trim();
+      if (!EMAIL_RE.test(email)) {
+        rqEmail.classList.add('is-invalid'); rqErr.hidden = false; nudge(rqEmail); rqEmail.focus();
+        return;
+      }
+      var s = Booking.get(), q = quote(s);
+      if (!(s.checkin && s.checkout)) { Modal.close(); return; }
+      setLoading(rqSubmit, true);
       Api.send('booking', {
-        apartment: a.id, title: a.title, checkin: s.checkin, checkout: s.checkout, adults: s.adults, children: s.children,
-        nights: nightsBetween(s.checkin, s.checkout), total: q ? q.total : null, currency: CFG.currency || 'THB'
+        apartment: a.id, title: a.title, city: a.city, checkin: s.checkin, checkout: s.checkout, adults: s.adults, children: s.children,
+        nights: nightsBetween(s.checkin, s.checkout), total: q ? q.total : null, currency: CFG.currency || 'THB', email: email
       }).then(function () {
-        $('[data-bsum]', done).textContent = a.title + ', ' + fmtRange(s.checkin, s.checkout) + ' · ' + guestsLabel(s);
-        Modal.open(done);
+        lsSet('fh-contact', { email: email });
+        $('[data-rq-done]', req).innerHTML = 'We’re checking ' + esc(a.title) + ' for <b class="nowrap">' + esc(fmtRange(s.checkin, s.checkout)) + '</b> and will reply to <b>' + esc(email) + '</b> within an hour. Nothing is charged until you confirm.';
+        $('.modal__title', req).textContent = 'Thank you!';
+        rqForm.hidden = true; rqOk.hidden = false;
+        if (bookNote) bookNote.textContent = 'Request sent — we’ll reply to ' + email;
       }, function () {
-        if (bookErr) { bookErr.textContent = 'We couldn’t send your request. Please try again.'; bookErr.hidden = false; }
-      }).then(function () { setLoading(bookBtn, false); });
+        rqFail.textContent = 'We couldn’t send your request. Please try again or message us on WhatsApp.';
+        rqFail.hidden = false;
+      }).then(function () { setLoading(rqSubmit, false); });
     });
 
-    // mobile bottom bar
+    function startBooking() {
+      var s = Booking.get();
+      if (bookErr) bookErr.hidden = true;
+      if (!(s.checkin && s.checkout)) { Pop.open(popDates, fIn); return; }
+      Modal.open(req);
+    }
+    bookBtn.addEventListener('click', startBooking);
+
+    // mobile bottom bar: same flow as the booking card
     var bar = $('#book-bar');
     if (bar && 'IntersectionObserver' in window) {
       var bkVisible = false, pastGallery = false;
       var sync = function () { bar.classList.toggle('is-visible', pastGallery && !bkVisible); };
       new IntersectionObserver(function (e) { bkVisible = e[0].isIntersecting; sync(); }, { threshold: 0.15 }).observe(bk);
       new IntersectionObserver(function (e) { pastGallery = !e[0].isIntersecting && e[0].boundingClientRect.top < 0; sync(); }).observe($('#gallery'));
-      $('#book-bar-btn').addEventListener('click', function () { bk.scrollIntoView({ behavior: smooth(), block: 'center' }); });
     }
+    if (barBtn) barBtn.addEventListener('click', function () {
+      var s = Booking.get();
+      if (mqMobile.matches || (s.checkin && s.checkout)) { startBooking(); return; }
+      // tablets: the date picker opens next to the booking card, so bring it into view first
+      bk.scrollIntoView({ behavior: smooth(), block: 'center' });
+      setTimeout(startBooking, reduceMotion ? 0 : 520);
+    });
 
     $('#share-btn').addEventListener('click', function () {
       if (navigator.share) { navigator.share({ title: a.title, url: location.href }).catch(function () {}); return; }
@@ -1324,7 +1596,10 @@
     save.setAttribute('data-fav', a.id);
     save.setAttribute('aria-pressed', favs.indexOf(a.id) > -1 ? 'true' : 'false');
 
-    var sim = Repo.search({ exclude: a.id }).sort(function (x, y) { return (y.city === a.city) - (x.city === a.city); }).slice(0, 7);
+    // similar: same city first, then the same budget, best rated first
+    var sim = Repo.search({ exclude: a.id, sort: 'recommended' }).sort(function (x, y) {
+      return ((y.city === a.city) * 2 + (y.tier === a.tier)) - ((x.city === a.city) * 2 + (x.tier === a.tier));
+    }).slice(0, 8);
     renderCards($('#similar-track'), sim, {});
     initCarousel($('#similar'));
   }
@@ -1392,6 +1667,10 @@
 
     Repo.load().then(function () {
       Search = createStore({ city: '', checkin: '', checkout: '', adults: 2, children: 0 }, { persist: 'fh-search' });
+      // forget saved apartments that are no longer listed
+      var live = favs.filter(function (id) { return Repo.get(id); });
+      if (live.length !== favs.length && Repo.all().length) { favs.length = 0; live.forEach(function (id) { favs.push(id); }); lsSet('fh-favs', favs); }
+      syncFavCount(false);
       setupImages(doc);
       buildFinder();
       var request = buildRequest();
