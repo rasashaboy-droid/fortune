@@ -184,7 +184,7 @@
         area: String(r.area || ''),
         type: String(r.type || 'Apartment'),
         beds: Math.max(0, Math.round(num(r.beds, 1))),
-        baths: Math.max(0, Math.round(num(r.baths, 1))),
+        baths: Math.max(0, Math.round(num(r.baths, 1) * 2) / 2),
         guests: Math.max(1, Math.round(num(r.guests, 2))),
         size: Math.max(0, Math.round(num(r.size, 0))),
         price: Math.max(0, num(r.price, 0)),
@@ -988,7 +988,7 @@
       '</div>' +
       '<div class="apt-card__body">' +
       '<div class="apt-card__top"><p class="apt-card__loc">' + where + '</p>' +
-      (a.rating ? '<span class="rating">' + icon('star', 14) + a.rating.toFixed(2) + (a.reviews ? '<span class="rating__n">(' + a.reviews + ')</span>' : '') + '</span>' : '') + '</div>' +
+      (a.rating && a.reviews ? '<span class="rating">' + icon('star', 14) + a.rating.toFixed(2) + '<span class="rating__n">(' + a.reviews + ')</span></span>' : '<span class="rating rating--new">New</span>') + '</div>' +
       '<h3 class="apt-card__title"><a class="apt-card__link" href="' + href + '"' + linkAttrs() + '>' + esc(a.title) + '</a></h3>' +
       (a.near ? '<p class="apt-card__near">' + icon('near', 14) + '<span>' + esc(a.near) + '</span></p>' : '') +
       '<ul class="specs">' + specs + '</ul>' +
@@ -1385,7 +1385,7 @@
     set('[data-apt="title"]', esc(a.title));
     set('[data-apt="crumb"]', esc(a.title));
     set('[data-apt="meta"]',
-      (a.rating ? '<span class="rating">' + icon('star', 15) + a.rating.toFixed(2) + ' <span class="muted" style="font-weight:400">· ' + plural(a.reviews, 'review') + '</span></span>' : '') +
+      (a.rating && a.reviews ? '<span class="rating">' + icon('star', 15) + a.rating.toFixed(2) + ' <span class="muted" style="font-weight:400">· ' + plural(a.reviews, 'review') + '</span></span>' : '<span class="rating">New listing</span>') +
       '<span class="row gap-8">' + icon('pin', 17) + esc(a.area) + (a.area ? ', ' : '') + esc(cityName) + '</span>' +
       '<span class="row gap-8">' + icon('home', 17) + esc(a.type) + '</span>' +
       (a.building ? '<span class="row gap-8">' + icon('building', 17) + esc(a.building) + '</span>' : ''));
