@@ -11,8 +11,11 @@ Photos are loaded from Unsplash, so an internet connection is needed to see them
 
 ## Pages
 - `index.html` — home: hero + search bar + "Choose apartment" popup, carousel, why us, CTA, investors, footer
-- `search.html` — results with filters: city / dates / guests, budget (Budget · Mid-range · Luxury),
-  property type, sorting and "Show more" (`search.html?city=phuket&tier=luxury&type=Villa&in=2026-11-10&out=2026-11-15&adults=2`)
+- `search.html` — results with filters like on the big booking sites: city / dates / guests, price range
+  (histogram + slider + min/max), property type, bedrooms & bathrooms, amenities, booking options,
+  guest favourites and rating, plus sorting and "Show more"
+  (`search.html?city=phuket&price=1500-6000&types=Villa,Condo&beds=2&f=pool,seaview`).
+  "Recommended" order puts great-value budget and mid-range stays first, with 2–3 luxury stays in the first 15.
 - `search.html?saved=1` — apartments saved with the heart (kept on the visitor's device)
 - `apartment.html?id=…` — apartment page: gallery, details, booking card.
   Booking flow: dates → Done → guests → Done → "Request to book" → email → request sent.
@@ -20,10 +23,11 @@ Photos are loaded from Unsplash, so an internet connection is needed to see them
 - `privacy.html` — privacy policy
 
 ## Catalogue
-100 apartments in 10 cities (Bangkok 18, Phuket 16, Pattaya 14, Chiang Mai 10, Koh Samui 9,
-Krabi 8, Hua Hin 7, Koh Phangan 7, Hat Yai 6, Chiang Rai 5), split 20 % budget / 50 % mid-range /
-30 % luxury. Listings are modelled on what is offered on the big booking sites in each city
-(real districts and condo projects, typical sizes and nightly prices).
+118 real Airbnb listings in 10 cities (Bangkok 24, Phuket 22, Pattaya 20, Chiang Mai 10, Koh Samui 9,
+Krabi 8, Hua Hin 7, Koh Phangan 7, Hat Yai 6, Chiang Rai 5): 26 budget / 59 mid-range / 33 luxury.
+Photos, bedrooms, baths, guests, rating, reviews and amenities come from the same listing (link in the
+`source` field of each entry). Nightly prices are market estimates, because Airbnb only shows prices
+after dates are picked. Raw data and the generator: `_work/real/*.json`, `_work/build_real.py`.
 
 ## Where to edit
 - Apartments, cities, amenities, highlight chips, photos: `assets/js/data.js` — the top of the file

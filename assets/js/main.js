@@ -244,12 +244,75 @@
       return ready;
     }
 
-    /* "Recommended": rating weighted by how many reviews back it, plus a nudge for featured stays */
-    function score(a) {
-      return a.rating * 20 + Math.log(a.reviews + 1) * 2.2 + (a.featured ? 4 : 0) + (a.highlights.length ? 1 : 0);
+    /* ---- filters ---- */
+    function has(a, k) { return a.highlights.indexOf(k) > -1 || a.amenities.indexOf(k) > -1; }
+    /* filter keys used by the search page -> what they mean for a listing */
+    var FEATURES = {
+      pool: function (a) { return has(a, 'pool') || has(a, 'privatepool') || has(a, 'infinitypool') || has(a, 'rooftoppool') || has(a, 'poolaccess'); },
+      privatepool: function (a) { return has(a, 'privatepool'); },
+      seaview: function (a) { return has(a, 'seaview') || has(a, 'beachfront'); },
+      beachfront: function (a) { return has(a, 'beachfront') || has(a, 'beach'); },
+      jacuzzi: function (a) { return has(a, 'jacuzzi'); },
+      kitchen: function (a) { return has(a, 'kitchen'); },
+      washer: function (a) { return has(a, 'washer'); },
+      workspace: function (a) { return has(a, 'workspace'); },
+      gym: function (a) { return has(a, 'gym'); },
+      parking: function (a) { return has(a, 'parking'); },
+      bbq: function (a) { return has(a, 'bbq'); },
+      bathtub: function (a) { return has(a, 'bathtub'); },
+      selfcheckin: function (a) { return has(a, 'selfcheckin'); },
+      pets: function (a) { return has(a, 'pets') || has(a, 'petfriendly'); }
+    };
+    function isGuestFav(a) { return a.rating >= 4.95 && a.reviews >= 40; }
+
+    /* ---- "Recommended" ----
+       People should first see great value: beautiful budget stays (pool, view, location) and
+       mid-range places that look like luxury, with 2–3 luxury stays inside the first 15 so they
+       know that option exists. Each tier is ranked on its own, then the tiers are woven together. */
+    function wow(a) {
+      var w = 0;
+      if (has(a, 'infinitypool') || has(a, 'privatepool') || has(a, 'rooftoppool')) w += 6;
+      else if (has(a, 'pool') || has(a, 'poolaccess')) w += 2.5;
+      if (has(a, 'seaview') || has(a, 'beachfront') || has(a, 'riverview') || has(a, 'skyline') || has(a, 'panoramic') || has(a, 'mountainview')) w += 5;
+      if (has(a, 'jacuzzi') || has(a, 'garden')) w += 1;
+      return w;
+    }
+    function rankScore(a) {
+      var s = a.rating * 20 + Math.log(a.reviews + 1) * 2.2 + (isGuestFav(a) ? 3 : 0) + (a.featured ? 3 : 0);
+      if (a.tier === 'budget') s += wow(a) * 1.3 + (a.near ? 1.5 : 0) - a.price / 600;
+      else if (a.tier === 'mid') s += wow(a) * 1.5 + Math.min(a.size || 0, 160) / 25 + (a.beds >= 2 ? 1 : 0) - a.price / 2500;
+      else s += wow(a) + Math.log(a.price || 1) / 2;
+      return s;
+    }
+    var PATTERN = ['budget', 'mid', 'budget', 'mid', 'luxury', 'budget', 'mid', 'budget', 'mid', 'mid', 'luxury', 'budget', 'mid', 'budget', 'luxury'];
+    var FALLBACK = { budget: ['mid', 'luxury'], mid: ['budget', 'luxury'], luxury: ['mid', 'budget'] };
+    function recommend(items) {
+      var q = { budget: [], mid: [], luxury: [] };
+      items.forEach(function (a) { (q[a.tier] || q.mid).push(a); });
+      Object.keys(q).forEach(function (k) { q[k].sort(function (x, y) { return rankScore(y) - rankScore(x); }); });
+      var out = [];
+      // pick from a tier, preferring a city / type different from the last two cards
+      function take(t) {
+        var arr = q[t];
+        var recent = out.slice(-2);
+        var pick = 0;
+        for (var i = 0; i < Math.min(arr.length, 4); i++) {
+          var c = arr[i];
+          if (recent.every(function (r) { return r.city !== c.city || r.type !== c.type; }) && recent.every(function (r) { return r.city !== c.city; })) { pick = i; break; }
+        }
+        return arr.splice(pick, 1)[0];
+      }
+      for (var n = 0; out.length < items.length; n++) {
+        var t = PATTERN[n % PATTERN.length];
+        if (!q[t].length) t = FALLBACK[t].filter(function (k) { return q[k].length; })[0];
+        if (!t) break;
+        out.push(take(t));
+      }
+      return out;
     }
 
-    /* q: { city, guests, type, tier, ids, featured, sort, exclude } */
+    /* q: { ids, city, guests, type | types[], tier, priceMin, priceMax, beds ('studio' | min number),
+            baths (min), features[], fav, ratingMin, featured, exclude, sort } */
     function search(q) {
       q = q || {};
       var out = list.filter(function (a) {
@@ -257,7 +320,16 @@
         if (q.city && a.city !== q.city) return false;
         if (q.guests && a.guests < q.guests) return false;
         if (q.type && q.type !== 'All' && a.type !== q.type) return false;
+        if (q.types && q.types.length && q.types.indexOf(a.type) < 0) return false;
         if (q.tier && q.tier !== 'all' && a.tier !== q.tier) return false;
+        if (q.priceMin && a.price < q.priceMin) return false;
+        if (q.priceMax && a.price > q.priceMax) return false;
+        if (q.beds === 'studio' && a.beds !== 0) return false;
+        if (typeof q.beds === 'number' && q.beds > 0 && a.beds < q.beds) return false;
+        if (q.baths && a.baths < q.baths) return false;
+        if (q.features && q.features.some(function (k) { return FEATURES[k] && !FEATURES[k](a); })) return false;
+        if (q.fav && !isGuestFav(a)) return false;
+        if (q.ratingMin && a.rating < q.ratingMin) return false;
         if (q.featured && !a.featured) return false;
         if (q.exclude && a.id === q.exclude) return false;
         return true;
@@ -266,7 +338,7 @@
       if (q.sort === 'price-asc') out.sort(function (a, b) { return priceKey(a) - priceKey(b); });
       else if (q.sort === 'price-desc') out.sort(function (a, b) { return (b.price || 0) - (a.price || 0); });
       else if (q.sort === 'rating') out.sort(function (a, b) { return b.rating - a.rating || b.reviews - a.reviews; });
-      else if (q.sort === 'recommended') out.sort(function (a, b) { return score(b) - score(a); });
+      else if (q.sort === 'recommended') out = recommend(out);
       else if (q.sort === 'saved' && q.ids) out.sort(function (a, b) { return q.ids.indexOf(b.id) - q.ids.indexOf(a.id); });
       return out;
     }
@@ -286,7 +358,12 @@
       tiers: function () { return TIER_KEYS.slice(); },
       tierName: function (k) { return TIERS[k] || ''; },
       highlight: function (k) { return HL[k] || null; },
-      isGuestFav: function (a) { return a.rating >= 4.95 && a.reviews >= 40; },
+      isGuestFav: isGuestFav,
+      features: function () { return Object.keys(FEATURES); },
+      priceRange: function () {
+        var p = list.map(function (a) { return a.price; }).filter(Boolean);
+        return p.length ? [Math.min.apply(null, p), Math.max.apply(null, p)] : [0, 0];
+      },
       cities: function () { return D.cities.slice(); },
       isCity: function (id) { return !!cityById[id]; },
       cityName: function (id) {
@@ -1173,13 +1250,34 @@
   function pageHome() {
     var track = $('#featured-track');
     if (track) {
-      var items = Repo.search({ featured: true, sort: 'recommended' });
-      if (!items.length) items = Repo.all().slice(0, 8);
+      // the same value-first mix as the search page: budget and mid-range gems, a few luxury stays
+      var items = Repo.search({ sort: 'recommended' }).slice(0, 10);
       renderCards(track, items, {});
       initCarousel($('#featured'));
     }
     initSearchBar($('#hero-search'), Search, function () { navigate('search.html?' + searchQuery(Search.get())); });
   }
+
+  /* ---- price range: histogram + two-handle slider + min / max fields (log scale, so budget
+          prices get as much room as villas) ---- */
+  function priceScale() {
+    var r = Repo.priceRange();
+    var lo = Math.max(100, Math.floor(r[0] / 100) * 100), hi = Math.max(lo + 1000, Math.ceil(r[1] / 1000) * 1000);
+    var nice = function (p) { var s = p < 2000 ? 50 : p < 10000 ? 100 : 500; return Math.round(p / s) * s; };
+    return {
+      lo: lo, hi: hi, steps: 1000,
+      toPrice: function (t) { return t <= 0 ? lo : t >= 1000 ? hi : nice(lo * Math.pow(hi / lo, t / 1000)); },
+      toT: function (p) { return p <= lo ? 0 : p >= hi ? 1000 : Math.round(1000 * Math.log(p / lo) / Math.log(hi / lo)); }
+    };
+  }
+  var FEATURE_LABELS = {
+    pool: ['Swimming pool', 'pool'], privatepool: ['Private pool', 'pool'], seaview: ['Sea view', 'waves'], beachfront: ['Beachfront', 'umbrella'],
+    jacuzzi: ['Jacuzzi', 'bubbles'], kitchen: ['Kitchen', 'kitchen'], washer: ['Washing machine', 'washer'], workspace: ['Workspace', 'workspace'],
+    gym: ['Gym', 'gym'], parking: ['Free parking', 'parking'], bbq: ['BBQ area', 'flame'], bathtub: ['Bathtub', 'bath'],
+    selfcheckin: ['Self check-in', 'key'], pets: ['Pets allowed', 'paw']
+  };
+  var AMENITY_FILTERS = ['pool', 'privatepool', 'seaview', 'beachfront', 'jacuzzi', 'kitchen', 'washer', 'workspace', 'gym', 'parking', 'bbq', 'bathtub'];
+  var BOOKING_FILTERS = ['selfcheckin', 'pets'];
 
   function pageSearch() {
     var p = params();
@@ -1192,47 +1290,264 @@
     Search.set(patch, true);
 
     var PAGE = 12;
+    var SC = priceScale();
     var types = Repo.types();
-    var TIER_HINT = (function () {
-      var t = CFG.tiers || {}, lo = t.budgetBelow || 1500, hi = t.luxuryFrom || 5500;
-      return { budget: 'under ' + money(lo) + ' a night', mid: money(lo) + '–' + money(hi).replace('฿', '') + ' a night', luxury: 'from ' + money(hi) + ' a night' };
-    })();
     var SORTS = { recommended: 'Recommended', 'price-asc': 'Price: low to high', 'price-desc': 'Price: high to low', rating: 'Top rated', saved: 'Recently saved' };
+    var num = function (v) { v = parseInt(String(v || '').replace(/[^0-9]/g, ''), 10); return isNaN(v) ? 0 : v; };
+
+    // ---- state (from the URL, so filtered links can be shared) ----
+    var F = { priceMin: 0, priceMax: 0, types: [], beds: '', baths: 0, features: [], fav: false, ratingMin: 0 };
+    if (p.price) { var pr = p.price.split('-'); F.priceMin = num(pr[0]); F.priceMax = num(pr[1]); }
+    if (p.tier === 'budget') F.priceMax = 1499; // links made before the price slider
+    if (p.tier === 'mid') { F.priceMin = 1500; F.priceMax = 5499; }
+    if (p.tier === 'luxury') F.priceMin = 5500;
+    String(p.types || p.type || '').split(',').forEach(function (t) { if (types.indexOf(t) > -1 && F.types.indexOf(t) < 0) F.types.push(t); });
+    F.beds = p.beds === 'studio' ? 'studio' : (num(p.beds) ? Math.min(4, num(p.beds)) : '');
+    F.baths = Math.min(3, num(p.baths));
+    String(p.f || '').split(',').forEach(function (k) { if (FEATURE_LABELS[k] && F.features.indexOf(k) < 0) F.features.push(k); });
+    F.fav = p.fav === '1';
+    F.ratingMin = [4.8, 4.9].indexOf(parseFloat(p.rating)) > -1 ? parseFloat(p.rating) : 0;
+    function clampPrice() {
+      if (F.priceMin && F.priceMin <= SC.lo) F.priceMin = 0;
+      if (F.priceMax && F.priceMax >= SC.hi) F.priceMax = 0;
+      if (F.priceMin && F.priceMax && F.priceMin > F.priceMax) { var x = F.priceMin; F.priceMin = F.priceMax; F.priceMax = x; }
+    }
+    clampPrice();
+
     var state = {
       saved: p.saved === '1',
-      type: types.indexOf(p.type) > -1 ? p.type : 'All',
-      tier: Repo.tierName(p.tier) ? p.tier : 'all',
       sort: SORTS[p.sort] ? p.sort : (p.saved === '1' ? 'saved' : 'recommended'),
       limit: PAGE
     };
     if (state.sort === 'saved' && !state.saved) state.sort = 'recommended';
 
     var grid = $('#results-grid'), count = $('#results-count'), title = $('#results-title'), sub = $('#results-sub');
-    var chipsBox = $('#type-chips'), seg = $('#tier-seg'), filters = $('#filters');
+    var bar = $('#filters');
     var more = $('#results-more'), moreBtn = $('#more-btn'), moreText = $('#more-text'), moreBar = $('#more-bar');
     var crumb = $('#results-crumb');
 
-    // budget segments
-    seg.innerHTML = '<span class="seg__thumb" aria-hidden="true"></span>' + [['all', 'Any budget']].concat(Repo.tiers().map(function (k) { return [k, Repo.tierName(k)]; })).map(function (t) {
-      return '<button type="button" class="seg__opt" role="radio" data-tier="' + t[0] + '" aria-checked="false"' + (TIER_HINT[t[0]] ? ' title="' + esc(TIER_HINT[t[0]]) + '"' : '') + '>' + (t[0] === 'all' ? '<span class="seg__long">Any budget</span><span class="seg__short">Any</span>' : esc(t[1])) + '</button>';
-    }).join('');
-    var thumb = $('.seg__thumb', seg);
-    function placeThumb(instant) {
-      var on = $('[aria-checked="true"]', seg);
-      if (!on) return;
-      if (instant) thumb.style.transition = 'none';
-      thumb.style.width = on.offsetWidth + 'px';
-      thumb.style.transform = 'translateX(' + on.offsetLeft + 'px)';
-      if (instant) { void thumb.offsetWidth; thumb.style.transition = ''; }
+    // ---- queries ----
+    function query(over, without) {
+      var s = Search.get();
+      var q = state.saved ? { ids: favs.slice(), sort: state.sort }
+        : { city: s.city, guests: s.adults + s.children, priceMin: F.priceMin, priceMax: F.priceMax, types: F.types.slice(),
+            beds: F.beds === 'studio' ? 'studio' : (F.beds || 0), baths: F.baths, features: F.features.slice(), fav: F.fav, ratingMin: F.ratingMin, sort: state.sort };
+      (without || []).forEach(function (k) { if (k === 'price') { q.priceMin = 0; q.priceMax = 0; } else if (k === 'types') q.types = []; else if (k === 'rooms') { q.beds = 0; q.baths = 0; } else if (k === 'features') q.features = []; });
+      if (over) for (var k in over) q[k] = over[k];
+      return q;
     }
-    window.addEventListener('resize', function () { placeThumb(true); });
-    if (doc.fonts && doc.fonts.ready) doc.fonts.ready.then(function () { placeThumb(true); });
+    var countOf = function (over, without) { var q = query(over, without); q.sort = ''; return Repo.count(q); };
+    function activeCount(group) {
+      if (group === 'price') return F.priceMin || F.priceMax ? 1 : 0;
+      if (group === 'types') return F.types.length;
+      if (group === 'rooms') return (F.beds !== '' ? 1 : 0) + (F.baths ? 1 : 0);
+      if (group === 'more') return F.features.length + (F.fav ? 1 : 0) + (F.ratingMin ? 1 : 0);
+      return activeCount('price') + activeCount('types') + activeCount('rooms') + activeCount('more');
+    }
 
-    // property types
-    chipsBox.innerHTML = ['All'].concat(types).map(function (t) {
-      return '<button type="button" class="chip" data-type="' + esc(t) + '" aria-pressed="false">' + (t === 'All' ? 'All types' : esc(t) + 's') + '<span class="chip__n" data-n></span></button>';
-    }).join('');
+    // ---- filter pills (each opens a dropdown on desktop, a bottom sheet on phones) ----
+    var chev = icon('chevronDown', 16);
+    bar.innerHTML =
+      '<button type="button" class="fpill" data-fp="price" aria-haspopup="dialog" aria-expanded="false"><span class="fpill__label"></span>' + chev + '</button>' +
+      '<button type="button" class="fpill" data-fp="types" aria-haspopup="dialog" aria-expanded="false"><span class="fpill__label"></span>' + chev + '</button>' +
+      '<button type="button" class="fpill" data-fp="rooms" aria-haspopup="dialog" aria-expanded="false"><span class="fpill__label"></span>' + chev + '</button>' +
+      '<button type="button" class="fpill fpill--more" data-fp="more" aria-haspopup="dialog" aria-expanded="false">' + icon('sliders', 17) + '<span class="fpill__label">Filters</span><span class="fpill__n" data-fpn></span></button>' +
+      '<button type="button" class="fclear" data-fclearall hidden>Clear all</button>';
+    var pills = {};
+    $$('[data-fp]', bar).forEach(function (b) { pills[b.getAttribute('data-fp')] = b; });
+    var foot = '<div class="pop__foot"><button type="button" class="btn btn--sm btn--ghost" data-fclear>Clear</button><button type="button" class="btn btn--sm btn--primary" data-fdone>Show stays</button></div>';
 
+    // price
+    var BINS = 30;
+    var popPrice = Pop.create('pop--price', 'Price range',
+      '<div class="fpop"><div class="fpop__title">Price range</div><p class="fpop__sub">Per night, before fees</p>' +
+      '<div class="pf"><div class="pf__hist" aria-hidden="true">' + new Array(BINS + 1).join('<span></span>') + '</div>' +
+      '<div class="pf__slider"><span class="pf__track"></span><span class="pf__fill"></span>' +
+      '<input type="range" class="pf__range" data-pf="min" min="0" max="1000" step="1" aria-label="Minimum price">' +
+      '<input type="range" class="pf__range" data-pf="max" min="0" max="1000" step="1" aria-label="Maximum price"></div>' +
+      '<div class="pf__fields"><label class="pf__field"><span>Minimum</span><span class="pf__box"><i>฿</i><input type="text" inputmode="numeric" data-pfi="min" autocomplete="off"></span></label>' +
+      '<span class="pf__dash" aria-hidden="true"></span>' +
+      '<label class="pf__field"><span>Maximum</span><span class="pf__box"><i>฿</i><input type="text" inputmode="numeric" data-pfi="max" autocomplete="off"></span></label></div></div></div>' + foot);
+    var rMin = $('[data-pf="min"]', popPrice), rMax = $('[data-pf="max"]', popPrice), iMin = $('[data-pfi="min"]', popPrice), iMax = $('[data-pfi="max"]', popPrice);
+    var bars = $$('.pf__hist span', popPrice), fill = $('.pf__fill', popPrice);
+    function paintPrice(fromSlider) {
+      var a = F.priceMin ? SC.toT(F.priceMin) : 0, b = F.priceMax ? SC.toT(F.priceMax) : 1000;
+      if (!fromSlider) { rMin.value = a; rMax.value = b; }
+      fill.style.setProperty('--a', a / 1000); fill.style.setProperty('--b', b / 1000);
+      if (doc.activeElement !== iMin) iMin.value = (F.priceMin || SC.lo).toLocaleString('en-US');
+      if (doc.activeElement !== iMax) iMax.value = F.priceMax ? F.priceMax.toLocaleString('en-US') : SC.hi.toLocaleString('en-US') + '+';
+      // histogram of the stays that match every other filter
+      var counts = [];
+      for (var i = 0; i < BINS; i++) counts.push(0);
+      Repo.search(query({ sort: '' }, ['price'])).forEach(function (x) { var k = Math.min(BINS - 1, Math.floor(SC.toT(x.price) / 1000 * BINS)); counts[k]++; });
+      var mx = Math.max.apply(null, counts.concat([1]));
+      bars.forEach(function (el, k) {
+        el.style.height = (counts[k] ? 8 + counts[k] / mx * 92 : 3) + '%';
+        var mid = (k + 0.5) / BINS * 1000;
+        el.classList.toggle('is-on', mid >= a && mid <= b);
+      });
+    }
+    function onSlide(ev) {
+      var a = +rMin.value, b = +rMax.value, gap = 25;
+      if (a > b - gap) { if (ev && ev.target === rMin) { a = b - gap; rMin.value = a; } else { b = a + gap; rMax.value = b; } }
+      F.priceMin = a <= 0 ? 0 : SC.toPrice(a);
+      F.priceMax = b >= 1000 ? 0 : SC.toPrice(b);
+      paintPrice(true);
+      apply();
+    }
+    rMin.addEventListener('input', onSlide); rMax.addEventListener('input', onSlide);
+    // the handle that's on top is the one closest to the pointer
+    $('.pf__slider', popPrice).addEventListener('pointerdown', function (ev) {
+      var r = this.getBoundingClientRect(), t = (ev.clientX - r.left) / r.width * 1000;
+      var closerToMin = Math.abs(t - rMin.value) <= Math.abs(t - rMax.value);
+      rMin.style.zIndex = closerToMin ? 3 : 2; rMax.style.zIndex = closerToMin ? 2 : 3;
+    });
+    function onField(which) {
+      var v = num(which === 'min' ? iMin.value : iMax.value);
+      if (which === 'min') F.priceMin = v > SC.lo ? Math.min(v, SC.hi) : 0;
+      else F.priceMax = v && v < SC.hi ? Math.max(v, SC.lo) : 0;
+      clampPrice();
+      paintPrice(false);
+      apply();
+    }
+    [['min', iMin], ['max', iMax]].forEach(function (x) {
+      x[1].addEventListener('change', function () { onField(x[0]); });
+      x[1].addEventListener('keydown', function (ev) { if (ev.key === 'Enter') { ev.preventDefault(); onField(x[0]); x[1].blur(); } });
+      x[1].addEventListener('focus', function () { x[1].select(); });
+    });
+    popPrice._onOpen = function () { paintPrice(false); syncFoot(popPrice); };
+
+    // property type
+    var popTypes = Pop.create('pop--types', 'Property type',
+      '<div class="fpop"><div class="fpop__title">Property type</div><div class="checks">' + types.map(function (t) {
+        return '<label class="check"><input type="checkbox" value="' + esc(t) + '"><span class="check__box">' + icon('check', 14, 2.2) + '</span><span class="check__label">' + esc(t) + 's</span><span class="check__n" data-n></span></label>';
+      }).join('') + '</div></div>' + foot);
+    popTypes.addEventListener('change', function (ev) {
+      var c = ev.target.closest('input[type=checkbox]');
+      if (!c) return;
+      var i = F.types.indexOf(c.value);
+      if (c.checked && i < 0) F.types.push(c.value);
+      if (!c.checked && i > -1) F.types.splice(i, 1);
+      apply();
+    });
+
+    // rooms
+    var opt = function (group, val, label) { return '<button type="button" class="chip chip--sm" data-' + group + '="' + val + '" aria-pressed="false">' + label + '</button>'; };
+    var popRooms = Pop.create('pop--rooms', 'Rooms',
+      '<div class="fpop"><div class="fpop__title">Rooms</div>' +
+      '<div class="fgroup"><div class="fgroup__label">Bedrooms</div><div class="chips">' + opt('beds', '', 'Any') + opt('beds', 'studio', 'Studio') + opt('beds', 1, '1+') + opt('beds', 2, '2+') + opt('beds', 3, '3+') + opt('beds', 4, '4+') + '</div></div>' +
+      '<div class="fgroup"><div class="fgroup__label">Bathrooms</div><div class="chips">' + opt('baths', 0, 'Any') + opt('baths', 1, '1+') + opt('baths', 2, '2+') + opt('baths', 3, '3+') + '</div></div></div>' + foot);
+    popRooms.addEventListener('click', function (ev) {
+      var b = ev.target.closest('[data-beds],[data-baths]');
+      if (!b || b.disabled) return;
+      if (b.hasAttribute('data-beds')) { var v = b.getAttribute('data-beds'); F.beds = v === 'studio' ? 'studio' : (num(v) || ''); }
+      else F.baths = num(b.getAttribute('data-baths'));
+      apply();
+    });
+
+    // more filters
+    var checkRow = function (k) {
+      return '<label class="check check--icon"><input type="checkbox" value="' + k + '"><span class="check__box">' + icon('check', 14, 2.2) + '</span><span class="check__ico">' + icon(FEATURE_LABELS[k][1], 18) + '</span><span class="check__label">' + FEATURE_LABELS[k][0] + '</span><span class="check__n" data-n></span></label>';
+    };
+    var popMore = Pop.create('pop--filters', 'Filters',
+      '<div class="fpop fpop--scroll"><div class="fpop__title">Filters</div>' +
+      '<div class="fgroup"><div class="fgroup__label">Top-tier stays</div><label class="switch-row"><span><b>Guest favourites</b><small>The most loved homes, rated 4.95+ by 40 or more guests</small></span><input type="checkbox" class="switch" data-ffav></label></div>' +
+      '<div class="fgroup"><div class="fgroup__label">Guest rating</div><div class="chips">' + opt('rating', 0, 'Any') + opt('rating', 4.8, '4.8+') + opt('rating', 4.9, '4.9+') + '</div></div>' +
+      '<div class="fgroup"><div class="fgroup__label">Amenities</div><div class="checks checks--grid">' + AMENITY_FILTERS.map(checkRow).join('') + '</div></div>' +
+      '<div class="fgroup"><div class="fgroup__label">Booking options</div><div class="checks checks--grid">' + BOOKING_FILTERS.map(checkRow).join('') + '</div></div>' +
+      '</div>' + foot);
+    popMore.addEventListener('change', function (ev) {
+      if (ev.target.hasAttribute('data-ffav')) { F.fav = ev.target.checked; apply(); return; }
+      var c = ev.target.closest('.check input');
+      if (!c) return;
+      var i = F.features.indexOf(c.value);
+      if (c.checked && i < 0) F.features.push(c.value);
+      if (!c.checked && i > -1) F.features.splice(i, 1);
+      apply();
+    });
+    popMore.addEventListener('click', function (ev) {
+      var b = ev.target.closest('[data-rating]');
+      if (!b) return;
+      F.ratingMin = parseFloat(b.getAttribute('data-rating')) || 0;
+      apply();
+    });
+
+    var pops = { price: popPrice, types: popTypes, rooms: popRooms, more: popMore };
+    Object.keys(pops).forEach(function (k) {
+      var pop = pops[k];
+      if (!pop._onOpen) pop._onOpen = function () { syncFoot(pop); };
+      pills[k].addEventListener('click', function () { Pop.toggle(pop, pills[k]); });
+      pop.addEventListener('click', function (ev) {
+        if (ev.target.closest('[data-fdone]')) { Pop.close(); scrollToResults(); }
+        if (ev.target.closest('[data-fclear]')) {
+          if (k === 'price') { F.priceMin = 0; F.priceMax = 0; paintPrice(false); }
+          if (k === 'types') F.types = [];
+          if (k === 'rooms') { F.beds = ''; F.baths = 0; }
+          if (k === 'more') { F.features = []; F.fav = false; F.ratingMin = 0; }
+          apply();
+        }
+      });
+    });
+    $('[data-fclearall]', bar).addEventListener('click', function () { clearFilters(); apply(); });
+    function clearFilters() { F.priceMin = 0; F.priceMax = 0; F.types = []; F.beds = ''; F.baths = 0; F.features = []; F.fav = false; F.ratingMin = 0; }
+    function scrollToResults() {
+      var top = grid.getBoundingClientRect().top;
+      if (top < 0 || top > window.innerHeight * 0.75) window.scrollTo({ top: window.scrollY + top - 120, behavior: smooth() });
+    }
+    function syncFoot(pop) {
+      var n = countOf();
+      var b = $('[data-fdone]', pop);
+      if (b) b.textContent = n ? 'Show ' + plural(n, 'stay') : 'No stays match';
+    }
+
+    // ---- labels, counts and states inside the pills and dropdowns ----
+    function shortMoney(v) { return v >= 10000 ? '฿' + Math.round(v / 1000) + 'k' : money(v); }
+    function paintFilters() {
+      var lab = function (k, text) { $('.fpill__label', pills[k]).textContent = text; pills[k].classList.toggle('is-active', !!activeCount(k)); };
+      lab('price', F.priceMin && F.priceMax ? shortMoney(F.priceMin) + ' – ' + shortMoney(F.priceMax) : F.priceMin ? 'From ' + shortMoney(F.priceMin) : F.priceMax ? 'Up to ' + shortMoney(F.priceMax) : 'Price');
+      lab('types', !F.types.length ? 'Property type' : F.types.length === 1 ? F.types[0] + 's' : F.types.length === 2 ? F.types[0] + 's, ' + F.types[1] + 's' : F.types.length + ' types');
+      var rooms = [];
+      if (F.beds === 'studio') rooms.push('Studio'); else if (F.beds) rooms.push(F.beds + '+ bedrooms');
+      if (F.baths) rooms.push(F.baths + '+ baths');
+      lab('rooms', rooms.length ? rooms.join(' · ') : 'Rooms');
+      pills.more.classList.toggle('is-active', !!activeCount('more'));
+      var nm = activeCount('more'), badge = $('[data-fpn]', pills.more);
+      badge.textContent = nm; badge.hidden = !nm;
+      $('[data-fclearall]', bar).hidden = !activeCount();
+
+      // type counts
+      $$('.check', popTypes).forEach(function (row) {
+        var inp = $('input', row), t = inp.value;
+        inp.checked = F.types.indexOf(t) > -1;
+        var n = countOf({ types: [t] }, ['types']);
+        $('[data-n]', row).textContent = n;
+        row.classList.toggle('is-empty', !n && !inp.checked);
+      });
+      // rooms
+      $$('[data-beds]', popRooms).forEach(function (b) {
+        var v = b.getAttribute('data-beds'), val = v === 'studio' ? 'studio' : (num(v) || '');
+        b.setAttribute('aria-pressed', String(val === F.beds));
+        b.disabled = val !== '' && val !== F.beds && !countOf({ beds: val === 'studio' ? 'studio' : val });
+      });
+      $$('[data-baths]', popRooms).forEach(function (b) {
+        var v = num(b.getAttribute('data-baths'));
+        b.setAttribute('aria-pressed', String(v === F.baths));
+        b.disabled = v && v !== F.baths && !countOf({ baths: v });
+      });
+      // more
+      $('[data-ffav]', popMore).checked = F.fav;
+      $$('[data-rating]', popMore).forEach(function (b) { b.setAttribute('aria-pressed', String((parseFloat(b.getAttribute('data-rating')) || 0) === F.ratingMin)); });
+      $$('.check', popMore).forEach(function (row) {
+        var inp = $('input', row), k = inp.value;
+        inp.checked = F.features.indexOf(k) > -1;
+        var n = countOf({ features: F.features.filter(function (x) { return x !== k; }).concat([k]) });
+        $('[data-n]', row).textContent = n;
+        row.classList.toggle('is-empty', !n && !inp.checked);
+      });
+      for (var k in pops) if (Pop.current === pops[k]) syncFoot(pops[k]);
+    }
+
+    // ---- sort ----
     var sortBtn = $('#sort-btn');
     var popSort = Pop.create('pop--narrow', 'Sort by', '<div class="opt-list" role="listbox">' + Object.keys(SORTS).map(function (k) {
       return '<button type="button" class="opt" role="option" data-sort="' + k + '"><span class="opt__text"><span class="opt__title">' + SORTS[k] + '</span></span><span class="opt__check">' + icon('check', 14, 2) + '</span></button>';
@@ -1247,58 +1562,38 @@
       Pop.close();
       render(true);
     });
-    chipsBox.addEventListener('click', function (ev) {
-      var c = ev.target.closest('[data-type]');
-      if (!c || c.disabled) return;
-      state.type = c.getAttribute('data-type');
-      state.limit = PAGE;
-      render(true);
-    });
-    seg.addEventListener('click', function (ev) {
-      var o = ev.target.closest('[data-tier]');
-      if (!o) return;
-      state.tier = o.getAttribute('data-tier');
-      state.limit = PAGE;
-      render(true);
-    });
-    moreBtn.addEventListener('click', function () {
-      state.limit += PAGE;
-      render(false, true);
-    });
+    moreBtn.addEventListener('click', function () { state.limit += PAGE; render(false, true); });
 
     function syncURL() {
-      var extra = state.saved ? { saved: '1', sort: state.sort !== 'saved' ? state.sort : '' }
-        : { type: state.type !== 'All' ? state.type : '', tier: state.tier !== 'all' ? state.tier : '', sort: state.sort !== 'recommended' ? state.sort : '' };
+      var extra = state.saved ? { saved: '1', sort: state.sort !== 'saved' ? state.sort : '' } : {
+        price: F.priceMin || F.priceMax ? (F.priceMin || '') + '-' + (F.priceMax || '') : '',
+        types: F.types.join(','), beds: F.beds === '' ? '' : String(F.beds), baths: F.baths ? String(F.baths) : '',
+        f: F.features.join(','), fav: F.fav ? '1' : '', rating: F.ratingMin ? String(F.ratingMin) : '',
+        sort: state.sort !== 'recommended' ? state.sort : ''
+      };
       try { history.replaceState(null, '', 'search.html?' + searchQuery(Search.get(), extra)); } catch (e) { /* some browsers block this on file:// */ }
     }
 
-    function query(s, over) {
-      var q = state.saved ? { ids: favs.slice(), sort: state.sort }
-        : { city: s.city, guests: s.adults + s.children, type: state.type, tier: state.tier, sort: state.sort };
-      if (over) for (var k in over) q[k] = over[k];
-      return q;
+    var applyTimer;
+    function apply() {
+      state.limit = PAGE;
+      paintFilters();
+      clearTimeout(applyTimer);
+      applyTimer = setTimeout(function () { render(true); }, 120); // dragging the price handles stays smooth
     }
 
     var first = true, swapTimer, shown = 0;
     function render(animate, append) {
       var s = Search.get();
       var nights = nightsBetween(s.checkin, s.checkout);
-      var list = Repo.search(query(s));
+      var list = Repo.search(query());
       var page = list.slice(0, state.limit);
 
-      filters.hidden = state.saved;
+      bar.hidden = state.saved;
       $$('[data-sort="saved"]', popSort).forEach(function (o) { o.hidden = !state.saved; });
-      $$('[data-tier]', seg).forEach(function (x) { x.setAttribute('aria-checked', x.getAttribute('data-tier') === state.tier ? 'true' : 'false'); });
-      placeThumb(first);
-      $$('[data-type]', chipsBox).forEach(function (x) {
-        var t = x.getAttribute('data-type');
-        var n = Repo.count(query(s, { type: t, sort: '' }));
-        x.setAttribute('aria-pressed', t === state.type ? 'true' : 'false');
-        $('[data-n]', x).textContent = n;
-        x.disabled = !n && t !== state.type;
-      });
       $('.sort-btn__label', sortBtn).textContent = SORTS[state.sort];
       $$('[data-sort]', popSort).forEach(function (o) { o.setAttribute('aria-selected', o.getAttribute('data-sort') === state.sort ? 'true' : 'false'); });
+      paintFilters();
 
       if (state.saved) {
         title.textContent = 'Saved apartments';
@@ -1308,22 +1603,19 @@
       } else {
         title.textContent = s.city ? 'Apartments in ' + Repo.cityName(s.city) : 'Apartments across Thailand';
         sub.textContent = (s.checkin && s.checkout ? fmtRange(s.checkin, s.checkout) + ' · ' + plural(nights, 'night') : 'Any dates') + ' · ' + guestsLabel(s);
-        count.innerHTML = '<b>' + list.length + '</b> ' + (state.tier !== 'all' ? Repo.tierName(state.tier).toLowerCase() + ' ' : '') + (list.length === 1 ? 'stay' : 'stays') +
-          (state.tier !== 'all' ? '<span class="results__hint"> · ' + TIER_HINT[state.tier] + '</span>' : ' found');
+        count.innerHTML = '<b>' + list.length + '</b> ' + (list.length === 1 ? 'stay' : 'stays');
         if (crumb) crumb.textContent = 'Apartments';
       }
       doc.title = title.textContent + ' — Fortune House';
 
       var paint = function () {
         if (append && shown && list.length) {
-          var html = page.slice(shown).map(function (a, i) { return cardHTML(a, { nights: nights, boxed: true, i: i }); }).join('');
-          var tmp = doc.createElement('div'); tmp.innerHTML = html;
-          var added = Array.prototype.slice.call(tmp.children);
-          added.forEach(function (c) { grid.appendChild(c); });
-          added.forEach(function (c) { setupImages(c); });
+          var tmp = doc.createElement('div');
+          tmp.innerHTML = page.slice(shown).map(function (a, i) { return cardHTML(a, { nights: nights, boxed: true, i: i }); }).join('');
+          Array.prototype.slice.call(tmp.children).forEach(function (c) { grid.appendChild(c); setupImages(c); });
         } else if (list.length) renderCards(grid, page, { nights: nights, boxed: true });
         else if (state.saved) grid.innerHTML = '<div class="empty" style="grid-column:1/-1"><div class="empty__icon">' + icon('heart', 26) + '</div><h3 class="h3">No saved apartments yet</h3><p class="muted" style="max-width:380px">Tap the heart on any apartment and it will wait for you here — on this device, no sign-up needed.</p><a class="btn btn--primary btn--sm btn--arrow" href="search.html">Browse apartments<span class="btn__arrow">' + btnArrow(16) + '</span></a></div>';
-        else grid.innerHTML = '<div class="empty" style="grid-column:1/-1"><div class="empty__icon">' + icon('search', 26) + '</div><h3 class="h3">No apartments match yet</h3><p class="muted" style="max-width:380px">Try another city, a different budget or fewer guests — or ask us for a personal selection.</p><div class="row gap-8" style="flex-wrap:wrap;justify-content:center"><button type="button" class="btn btn--primary btn--sm" data-reset>Reset filters</button><button type="button" class="btn btn--ghost btn--sm" data-open="contact">Ask an expert</button></div></div>';
+        else grid.innerHTML = '<div class="empty" style="grid-column:1/-1"><div class="empty__icon">' + icon('search', 26) + '</div><h3 class="h3">No apartments match yet</h3><p class="muted" style="max-width:380px">Try a wider price range, fewer filters or another city — or ask us for a personal selection.</p><div class="row gap-8" style="flex-wrap:wrap;justify-content:center"><button type="button" class="btn btn--primary btn--sm" data-reset>Clear filters</button><button type="button" class="btn btn--ghost btn--sm" data-open="contact">Ask an expert</button></div></div>';
         shown = list.length ? page.length : 0;
         more.hidden = list.length <= page.length;
         moreText.textContent = 'Showing ' + page.length + ' of ' + list.length;
@@ -1331,7 +1623,7 @@
         grid.classList.remove('is-updating');
       };
       clearTimeout(swapTimer);
-      if (animate && !first && !reduceMotion && !append) { grid.classList.add('is-updating'); swapTimer = setTimeout(paint, 220); }
+      if (animate && !first && !reduceMotion && !append) { grid.classList.add('is-updating'); swapTimer = setTimeout(paint, 200); }
       else paint();
       first = false;
       syncURL();
@@ -1339,15 +1631,12 @@
 
     grid.addEventListener('click', function (ev) {
       if (!ev.target.closest('[data-reset]')) return;
-      state.type = 'All'; state.tier = 'all'; state.limit = PAGE;
+      clearFilters(); state.limit = PAGE;
       Search.set({ city: '', adults: 1, children: 0 });
       render(true);
     });
     // on the saved list, removing a heart takes the card away
-    favSubs.push(function () {
-      if (!state.saved) return;
-      setTimeout(function () { render(true); }, 260);
-    });
+    favSubs.push(function () { if (state.saved) setTimeout(function () { render(true); }, 260); });
 
     initSearchBar($('#page-search'), Search, function () {
       if (state.saved) { state.saved = false; state.sort = 'recommended'; }
