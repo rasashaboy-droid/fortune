@@ -59,7 +59,10 @@ window.FH_CONFIG = {
     v9: '1759372945658-1e9f56e751bd',   // villa with a pool at twilight (CTA band)
     v12: '1719887805632-de5be825f72b',  // modern house among palms (investors)
     v13: '1543489822-c49534f3271f',     // sea-view villa (investors)
-    v16: '1722421492323-eaf9c401befe'   // villa exterior (investors)
+    v16: '1722421492323-eaf9c401befe',  // villa exterior (investors)
+    caseKata: '1714919286244-6f3f6cce6e65',  // owner case study: sea-view balcony
+    caseAsok: '1757924461488-ef9ad0670978',  // owner case study: city living room
+    caseSamui: '1613490493576-7fde63acd811'  // owner case study: pool villa
   };
 
   var CITIES = [

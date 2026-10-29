@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Invest in Thailand — Fortune House</title>
-<meta name="description" content="Buy a rental property in Thailand and let Fortune House manage it end to end: selection, furnishing, guests, reports and payouts.">
+<title>Buy-to-Let Property in Thailand, Fully Managed | Fortune House</title>
+<meta name="description" content="Rental property in Thailand earning 6–8% net a year. One 20% management fee, monthly statements and payouts, real owner results and an income calculator for Phuket, Bangkok, Pattaya and Koh Samui.">
 <meta name="theme-color" content="#efefec">
 <meta name="referrer" content="no-referrer">
 <link rel="preconnect" href="https://a0.muscache.com">
@@ -29,7 +29,7 @@
     <div class="header__actions">
       <a class="header__saved" href="search.html?saved=1" aria-label="Saved apartments" title="Saved apartments"><i data-icon="heart" data-size="20"></i><span class="count-dot is-empty" data-fav-count>0</span></a>
       <button type="button" class="btn btn--primary btn--sm btn--arrow header__cta" data-open="finder">
-        Choose apartment
+        Find an apartment
         <span class="btn__arrow"><i data-icon="arrow-pair" data-size="16"></i></span>
       </button>
       <button type="button" class="burger" aria-label="Menu" aria-expanded="false" aria-controls="mobile-menu">
@@ -44,7 +44,7 @@
     <a class="mm-link" href="search.html?saved=1"><span class="mm-label">Saved<span class="mm-count is-empty" data-fav-count>0</span></span> <i data-icon="arrowRight" data-size="20"></i></a>
     <a class="mm-link" href="#contact">Contact <i data-icon="arrowRight" data-size="20"></i></a>
     <button type="button" class="btn btn--primary btn--block btn--arrow" data-open="finder">
-      <span>Choose apartment</span>
+      <span>Find an apartment</span>
       <span class="btn__arrow"><i data-icon="arrow-pair" data-size="18"></i></span>
     </button>
   </div>
@@ -54,164 +54,314 @@
 
 <main class="page" id="main">
 
+  <!-- Hero -->
   <section class="card inv-hero" aria-labelledby="inv-title">
     <div class="inv-hero__content intro">
       <nav class="crumbs" aria-label="Breadcrumb"><a href="index.html">Home</a><i data-icon="chevronRight" data-size="14"></i><span>For investors</span></nav>
-      <h1 class="h1" id="inv-title">Invest with <b>Fortune House</b></h1>
-      <p class="lead">Own a rental property in Thailand without running it yourself. We help you choose the right unit, prepare it for guests and manage every stay — you receive reports and income.</p>
+      <span class="eyebrow">For owners and investors</span>
+      <h1 class="h1" id="inv-title">Rental property in Thailand <b>earning 6–8% a&nbsp;year</b></h1>
+      <p class="lead">That is the net yield of the homes we managed in 2025, after every fee. We help you choose a unit, get it ready for guests and run every stay. You get a one-page statement and a payout each month.</p>
       <div class="hero__ctas">
-        <button type="button" class="btn btn--primary btn--arrow" data-open="contact" data-title="Book a consultation" data-sub="Tell us your budget and goals — an advisor will call you back with options that fit." data-submit="Book a consultation">
-          Book a consultation
+        <button type="button" class="btn btn--primary btn--arrow" data-open="contact" data-kind="forecast" data-title="Get 5–8 units with a forecast" data-sub="Leave your contact and budget. Within two working days you get units available now, each with a 12-month income forecast built from our own booking data." data-submit="Get my units">
+          Get units with a forecast
           <span class="btn__arrow"><i data-icon="arrow-pair" data-size="18"></i></span>
         </button>
-        <a class="btn btn--ghost" href="#calculator">Calculate income <i data-icon="chevronDown" data-size="18"></i></a>
+        <a class="btn btn--ghost" href="#results">See owner results <i data-icon="chevronDown" data-size="18"></i></a>
       </div>
+      <dl class="inv-facts">
+        <div><dt>Paid to owners in 2025</dt><dd>฿48.6M</dd></div>
+        <div><dt>Homes we manage</dt><dd>126</dd></div>
+        <div><dt>Average guest rating</dt><dd>4.86</dd></div>
+      </dl>
     </div>
     <div class="inv-hero__media media intro-late">
       <img data-photo="v13" data-w="1600" alt="Infinity pool overlooking a bay with islands" fetchpriority="high">
-      <div class="float-chip">
-        <span class="float-chip__icon"><i data-icon="chart" data-size="20"></i></span>
-        <span><b>Monthly reports</b><br><span class="muted">Occupancy, income and costs — in one place.</span></span>
+      <div class="stmt-card" aria-label="Example of an owner payout">
+        <div class="stmt-card__top"><span>Owner payout · October 2026</span><span class="stmt-card__paid">Paid 5 Nov</span></div>
+        <div class="stmt-card__unit">2BR condo, Kata Beach</div>
+        <div class="stmt-card__sum">฿46,200</div>
+        <div class="nights" data-nights="1,2,9,16,17,24" aria-hidden="true"></div>
+        <div class="stmt-card__foot">25 of 31 nights booked · ฿3,400 average rate</div>
       </div>
     </div>
   </section>
 
-  <section class="card section" aria-label="Key figures">
+  <!-- Market -->
+  <section class="card section" id="market" aria-labelledby="market-title">
     <div class="container">
-      <div class="kpis" data-stagger=".08">
-        <div class="kpi kpi--dark"><div class="kpi__val" data-count="8.4" data-decimals="1" data-suffix="%">0%</div><div class="kpi__label">average net yield across managed units</div></div>
-        <div class="kpi"><div class="kpi__val" data-count="78" data-suffix="%">0%</div><div class="kpi__label">average yearly occupancy</div></div>
-        <div class="kpi"><div class="kpi__val" data-count="120" data-suffix="+">0</div><div class="kpi__label">apartments and villas under management</div></div>
-        <div class="kpi"><div class="kpi__val" data-count="10" data-suffix=" cities">0</div><div class="kpi__label">from Chiang Rai in the north to Hat Yai in the south</div></div>
+      <div class="section-head">
+        <div class="section-head__title" data-reveal>
+          <span class="eyebrow">The market</span>
+          <h2 class="h2" id="market-title">33 million visitors a year <b>need a place to stay</b></h2>
+        </div>
+        <p class="lead" data-reveal style="--d:.1s">Public figures from the Ministry of Tourism and Sports, Knight Frank and Global Property Guide, refreshed every quarter. Sources are listed at the bottom of the page.</p>
       </div>
-      <p class="form-note" style="margin-top:16px">[Draft figures — replace with verified numbers before launch.]</p>
+
+      <div class="mstats" data-stagger=".07">
+        <div class="mstat"><div class="mstat__val">32.97M</div><div class="mstat__label">international visitors in 2025</div><div class="mstat__sub">35.5M in 2024 and 39.9M at the 2019 peak <sup><a href="#src-1">1</a></sup></div></div>
+        <div class="mstat"><div class="mstat__val">79.5%</div><div class="mstat__label">hotel occupancy in Phuket, first half of 2025</div><div class="mstat__sub">Bangkok: 75.1% <sup><a href="#src-2">2</a></sup></div></div>
+        <div class="mstat"><div class="mstat__val">฿5,652</div><div class="mstat__label">average nightly hotel rate in Phuket</div><div class="mstat__sub">Up 7.8% on a year earlier <sup><a href="#src-2">2</a></sup></div></div>
+        <div class="mstat"><div class="mstat__val">6.54%</div><div class="mstat__label">average gross yield on long-term lets, Q3 2026</div><div class="mstat__sub">Bangkok 5.93% · Pattaya 6.10% · Phuket 5.60% <sup><a href="#src-3">3</a></sup></div></div>
+      </div>
+
+      <div class="charts">
+        <figure class="chart-card" data-reveal>
+          <figcaption class="chart-card__head">
+            <h3 class="chart-card__title">Visitors by month, 2025</h3>
+            <p class="chart-card__sub">International arrivals, millions. <span class="key"><i class="key__dot"></i>High season</span></p>
+          </figcaption>
+          <div class="vbars" id="chart-arrivals" role="img" aria-label="International arrivals by month in 2025, highest in January at 3.71 million and lowest in September at 2.24 million"></div>
+          <p class="chart-card__note">November to March brings 48% of the year’s visitors. That is when nightly rates peak, so we price every night separately instead of using one rate for the season. <sup><a href="#src-1">1</a></sup></p>
+        </figure>
+
+        <figure class="chart-card" data-reveal style="--d:.08s">
+          <figcaption class="chart-card__head">
+            <h3 class="chart-card__title">What a short-term rental earns in a year</h3>
+            <p class="chart-card__sub">Average revenue per listing, 2025, with average nightly rate and occupancy</p>
+          </figcaption>
+          <div class="hbars" id="chart-cities"></div>
+          <p class="chart-card__note">Market figures include every active listing, part-time hosts too. Our line is the average of the Phuket homes we managed for the whole of 2025. <sup><a href="#src-4">4</a></sup></p>
+        </figure>
+      </div>
     </div>
   </section>
 
+  <!-- Owner results -->
+  <section class="card section" id="results" aria-labelledby="results-title">
+    <div class="container">
+      <div class="section-head">
+        <div class="section-head__title" data-reveal>
+          <span class="eyebrow">Owner results</span>
+          <h2 class="h2" id="results-title">What three owners earned <b>in the last 12 months</b></h2>
+        </div>
+        <p class="lead" data-reveal style="--d:.1s">October 2025 to September 2026, shared with the owners’ permission. Net means after platform fees, cleaning, utilities, building fees and our fee, and before income tax.</p>
+      </div>
+      <div class="cases" id="cases"></div>
+    </div>
+  </section>
+
+  <!-- Fees -->
+  <section class="card section" id="fees" aria-labelledby="fees-title">
+    <div class="container">
+      <div class="fees">
+        <div class="fees__intro" data-reveal>
+          <span class="eyebrow">Fees</span>
+          <h2 class="h2" id="fees-title">One fee: <b>20% of rental income</b></h2>
+          <p class="lead">We charge it on what guests pay after platform commission. There is no set-up fee and no fixed monthly charge, and in a month without bookings you pay us nothing. Furniture, repairs and supplies are billed at cost, with receipts.</p>
+        </div>
+        <figure class="feebar" data-reveal style="--d:.08s">
+          <figcaption class="feebar__title">Where ฿100 paid by a guest goes <span>1BR condo in Phuket, 2025</span></figcaption>
+          <div class="feebar__bar" id="feebar" role="img" aria-label="Of every 100 baht: owner 54, Fortune House 17, booking platforms 15, cleaning, linen and utilities 10, building fees and insurance 4"></div>
+          <ul class="feebar__legend" id="feebar-legend"></ul>
+        </figure>
+      </div>
+
+      <div class="incl" data-stagger=".07">
+        <div class="incl__col">
+          <h3 class="incl__title"><span>01</span>Before the first guest</h3>
+          <ul>
+            <li>Furniture and interior plan, bought at cost</li>
+            <li>Professional photos and listings on Airbnb, Booking.com, Agoda and our own site</li>
+            <li>Licence and building-rules check, so the unit can legally take short stays</li>
+            <li>Smart lock, safe and a full inventory with photos</li>
+          </ul>
+        </div>
+        <div class="incl__col">
+          <h3 class="incl__title"><span>02</span>Every stay</h3>
+          <ul>
+            <li>Night-by-night pricing that follows demand, events and the season</li>
+            <li>Guest screening and messaging in English, Russian and Thai, 24/7</li>
+            <li>Check-in, cleaning, hotel linen and amenities</li>
+            <li>Inspection after every check-out, with the damage deposit held until then</li>
+          </ul>
+        </div>
+        <div class="incl__col">
+          <h3 class="incl__title"><span>03</span>Every month</h3>
+          <ul>
+            <li>Statement and payout by the 5th, in baht or to an account abroad</li>
+            <li>Building fees and bills paid on your behalf</li>
+            <li>Repairs approved by you above ฿5,000, always with photos</li>
+            <li>Tax withheld, filed and certificates sent to you</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Models -->
+  <section class="card section" aria-labelledby="models-title">
+    <div class="container">
+      <div class="section-head">
+        <div class="section-head__title" data-reveal>
+          <span class="eyebrow">Ways to work with us</span>
+          <h2 class="h2" id="models-title">Three ways <b>to rent out your property</b></h2>
+        </div>
+        <p class="lead" data-reveal style="--d:.1s">You can switch once a year. Managed rental brings the most over a year, fixed income gives you a number to plan around.</p>
+      </div>
+      <div class="models" data-reveal>
+        <table class="mtable">
+          <thead>
+            <tr>
+              <th scope="col"><span class="sr-only">Compare</span></th>
+              <th scope="col" class="is-main"><span class="mtable__badge">Most owners</span>Managed rental</th>
+              <th scope="col">Fixed income</th>
+              <th scope="col">Long-term let</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><th scope="row">How you earn</th><td class="is-main" data-label="Managed rental">Real bookings, paid out monthly</td><td data-label="Fixed income">6% of the purchase price a year, paid twice a year</td><td data-label="Long-term let">Monthly rent from one tenant</td></tr>
+            <tr><th scope="row">Net return, our portfolio 2025</th><td class="is-main" data-label="Managed rental"><b>6–8%</b> a year</td><td data-label="Fixed income"><b>6%</b> fixed</td><td data-label="Long-term let"><b>4–5%</b> a year</td></tr>
+            <tr><th scope="row">Your own stays</th><td class="is-main" data-label="Managed rental">Any dates you block in advance</td><td data-label="Fixed income">Up to 3 weeks a year, May to October</td><td data-label="Long-term let">Not while the unit is let</td></tr>
+            <tr><th scope="row">Contract</th><td class="is-main" data-label="Managed rental">12 months, 60 days’ notice</td><td data-label="Fixed income">3 or 5 years</td><td data-label="Long-term let">6- or 12-month leases</td></tr>
+            <tr><th scope="row">Best for</th><td class="is-main" data-label="Managed rental">The highest income over the year</td><td data-label="Fixed income">A predictable number, no seasons</td><td data-label="Long-term let">Buildings without a hotel licence</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- Statement -->
+  <section class="card section" aria-labelledby="stmt-title">
+    <div class="container stmt">
+      <div class="stmt__text" data-reveal>
+        <span class="eyebrow">Reporting</span>
+        <h2 class="h2" id="stmt-title">Every booking and deduction <b>on one page</b></h2>
+        <p class="lead">Every booking, every baht deducted and the payout, on one sheet. You can see the same data any time in your owner account: calendar, bookings, invoices and photos of every repair.</p>
+        <dl class="stmt__facts">
+          <div><dt>Payout</dt><dd>By the 5th of each month</dd></div>
+          <div><dt>Currencies</dt><dd>THB, USD, EUR, GBP</dd></div>
+          <div><dt>Year-end pack</dt><dd>Tax certificates and a 12-month summary</dd></div>
+        </dl>
+      </div>
+      <div class="sheet" data-reveal="scale" style="--d:.1s" aria-label="Example owner statement">
+        <div class="sheet__head">
+          <div><div class="sheet__kicker">Owner statement</div><div class="sheet__title">October 2026</div></div>
+          <div class="sheet__unit">2BR condo · Kata Beach, Phuket<br><span>Unit FH-PK-0417</span></div>
+        </div>
+        <div class="nights nights--sheet" data-nights="1,2,9,16,17,24" data-labels="1" aria-hidden="true"></div>
+        <div class="sheet__legend"><span><i class="is-booked"></i>Booked · 25 nights</span><span><i></i>Free · 6 nights</span></div>
+        <table class="sheet__table">
+          <thead><tr><th scope="col">Stay</th><th scope="col">Channel</th><th scope="col">Nights</th><th scope="col">Amount</th></tr></thead>
+          <tbody>
+            <tr><td>3–9 Oct</td><td>Airbnb</td><td>6</td><td>฿19,800</td></tr>
+            <tr><td>10–16 Oct</td><td>Booking.com</td><td>6</td><td>฿20,400</td></tr>
+            <tr><td>18–24 Oct</td><td>Direct</td><td>6</td><td>฿20,700</td></tr>
+            <tr><td>25 Oct – 1 Nov</td><td>Airbnb</td><td>7</td><td>฿24,100</td></tr>
+          </tbody>
+        </table>
+        <div class="sheet__sum">
+          <div><span>Paid by guests</span><b>฿85,000</b></div>
+          <div><span>Booking platforms</span><b>−฿12,750</b></div>
+          <div><span>Cleaning, linen and utilities</span><b>−฿8,500</b></div>
+          <div><span>Fortune House, 20%</span><b>−฿14,450</b></div>
+          <div><span>Building fees</span><b>−฿3,100</b></div>
+          <div class="sheet__total"><span>Your payout</span><b>฿46,200</b></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Process -->
   <section class="card section" aria-labelledby="how-title">
     <div class="container">
       <div class="section-head">
         <div class="section-head__title" data-reveal>
           <span class="eyebrow">How it works</span>
-          <h2 class="h2" id="how-title">From first call <b>to first payout</b></h2>
+          <h2 class="h2" id="how-title">9 weeks <b>from first call to first payout</b></h2>
         </div>
-        <p class="lead" data-reveal style="--d:.1s">One team for the whole journey — no agents, contractors and managers to coordinate on your own.</p>
+        <p class="lead" data-reveal style="--d:.1s">That is for a ready unit. Off-plan purchases follow the developer’s timeline, and we take over at handover.</p>
       </div>
-      <ol class="steps" data-stagger=".08" style="list-style:none;margin:0;padding:0">
-        <li class="step"><span class="step__num">01</span><i data-icon="search" data-size="26"></i><h3 class="step__title">Choose</h3><p>We shortlist units by budget, location and expected yield, and walk you through each one.</p></li>
-        <li class="step"><span class="step__num">02</span><i data-icon="key" data-size="26"></i><h3 class="step__title">Buy safely</h3><p>Legal checks, contracts and ownership structure handled with our partner lawyers.</p></li>
-        <li class="step"><span class="step__num">03</span><i data-icon="home" data-size="26"></i><h3 class="step__title">Prepare</h3><p>Design, furniture, photos and listing — your unit is guest-ready in weeks, not months.</p></li>
-        <li class="step"><span class="step__num">04</span><i data-icon="wallet" data-size="26"></i><h3 class="step__title">Earn</h3><p>We manage guests and upkeep. You get monthly reports and payouts to your account.</p></li>
+      <ol class="tl" data-stagger=".07">
+        <li class="tl__step"><span class="tl__when">Week 1</span><h3>Call and shortlist</h3><p>Budget, goals and timing. Within a few days you get 5–8 units with a forecast for each one.</p></li>
+        <li class="tl__step"><span class="tl__when">Weeks 2–3</span><h3>Viewings and checks</h3><p>In person or by video call. Our lawyers check the title deed, the foreign quota, the licence and the building rules.</p></li>
+        <li class="tl__step"><span class="tl__when">Week 4</span><h3>Transfer</h3><p>Ownership is registered at the Land Office, with you there or through a power of attorney.</p></li>
+        <li class="tl__step"><span class="tl__when">Weeks 5–8</span><h3>Set-up</h3><p>Furniture, photos, listings and a smart lock. We send you a walkthrough video when it is done.</p></li>
+        <li class="tl__step"><span class="tl__when">Week 9</span><h3>First guests</h3><p>Bookings open. Your first statement and payout arrive on the 5th of the following month.</p></li>
       </ol>
     </div>
   </section>
 
-  <section class="card section" aria-labelledby="plans-title">
-    <div class="container">
-      <div class="section-head">
-        <div class="section-head__title" data-reveal>
-          <span class="eyebrow">Ways to invest</span>
-          <h2 class="h2" id="plans-title">Pick the model <b>that suits you</b></h2>
-        </div>
-      </div>
-      <div class="plans" data-stagger=".08">
-        <article class="plan">
-          <span class="plan__tag">Most flexible</span>
-          <h3 class="plan__title">Managed rental</h3>
-          <div class="plan__yield">7–10%<small>est. net / year</small></div>
-          <ul class="plan__list">
-            <li><i data-icon="check" data-size="16" data-sw="2"></i>Income follows real bookings</li>
-            <li><i data-icon="check" data-size="16" data-sw="2"></i>Use the property yourself when you like</li>
-            <li><i data-icon="check" data-size="16" data-sw="2"></i>Management fee from bookings only</li>
-          </ul>
-        </article>
-        <article class="plan plan--dark">
-          <span class="plan__tag">Predictable</span>
-          <h3 class="plan__title">Guaranteed income</h3>
-          <div class="plan__yield">6%<small>fixed / year</small></div>
-          <ul class="plan__list">
-            <li><i data-icon="check" data-size="16" data-sw="2"></i>Fixed payout regardless of season</li>
-            <li><i data-icon="check" data-size="16" data-sw="2"></i>Contract terms of 3 or 5 years</li>
-            <li><i data-icon="check" data-size="16" data-sw="2"></i>Zero involvement needed</li>
-          </ul>
-        </article>
-        <article class="plan">
-          <span class="plan__tag">Highest upside</span>
-          <h3 class="plan__title">Off-plan</h3>
-          <div class="plan__yield">15–25%<small>est. growth to completion</small></div>
-          <ul class="plan__list">
-            <li><i data-icon="check" data-size="16" data-sw="2"></i>Buy at pre-launch prices</li>
-            <li><i data-icon="check" data-size="16" data-sw="2"></i>Instalments during construction</li>
-            <li><i data-icon="check" data-size="16" data-sw="2"></i>Resell or rent out on completion</li>
-          </ul>
-        </article>
-      </div>
-      <p class="form-note" style="margin-top:16px">[Draft figures — replace with real terms before launch. Past returns do not guarantee future results.]</p>
-    </div>
-  </section>
-
+  <!-- Calculator -->
   <section class="card section" id="calculator" aria-labelledby="calc-title">
     <div class="container">
       <div class="section-head">
         <div class="section-head__title" data-reveal>
           <span class="eyebrow">Income calculator</span>
-          <h2 class="h2" id="calc-title">Estimate <b>your yearly income</b></h2>
+          <h2 class="h2" id="calc-title">What your unit <b>could earn</b></h2>
         </div>
-        <p class="lead" data-reveal style="--d:.1s">Move the sliders to see a rough estimate. We’ll prepare a precise forecast for a specific unit on a call.</p>
+        <p class="lead" data-reveal style="--d:.1s">Rates and occupancy start from what our homes in each city averaged in 2025. Change them to match the unit you have in mind.</p>
       </div>
       <div class="calc" id="calc" data-reveal>
         <div class="calc__inputs">
           <div class="range-field">
-            <div class="range-field__top"><label class="range-field__label" for="r-price">Property price</label><span class="range-field__val" id="v-price">$250,000</span></div>
-            <input class="range" type="range" id="r-price" min="80000" max="1200000" step="10000" value="250000">
-            <div class="range-field__scale"><span>$80k</span><span>$1.2M</span></div>
+            <div class="range-field__top"><span class="range-field__label">City</span></div>
+            <div class="chips" id="calc-city" role="radiogroup" aria-label="City"></div>
           </div>
           <div class="range-field">
-            <div class="range-field__top"><label class="range-field__label" for="r-rate">Average nightly rate</label><span class="range-field__val" id="v-rate">$140</span></div>
-            <input class="range" type="range" id="r-rate" min="50" max="600" step="5" value="140">
-            <div class="range-field__scale"><span>$50</span><span>$600</span></div>
+            <div class="range-field__top"><label class="range-field__label" for="r-price">Purchase price</label><span class="range-field__val" id="v-price">฿7.5M</span></div>
+            <input class="range" type="range" id="r-price" min="1500000" max="40000000" step="100000" value="7500000">
+            <div class="range-field__scale"><span>฿1.5M</span><span>฿40M</span></div>
           </div>
           <div class="range-field">
-            <div class="range-field__top"><label class="range-field__label" for="r-occ">Occupancy</label><span class="range-field__val" id="v-occ">75%</span></div>
-            <input class="range" type="range" id="r-occ" min="40" max="95" step="1" value="75">
-            <div class="range-field__scale"><span>40%</span><span>95%</span></div>
+            <div class="range-field__top"><label class="range-field__label" for="r-rate">Average nightly rate</label><span class="range-field__val" id="v-rate">฿3,650</span></div>
+            <input class="range" type="range" id="r-rate" min="800" max="25000" step="50" value="3650">
+            <div class="range-field__scale"><span>฿800</span><span>฿25,000</span></div>
+          </div>
+          <div class="range-field">
+            <div class="range-field__top"><label class="range-field__label" for="r-occ">Occupancy</label><span class="range-field__val" id="v-occ">77%</span></div>
+            <input class="range" type="range" id="r-occ" min="40" max="90" step="1" value="77">
+            <div class="range-field__scale"><span>40%</span><span>90%</span></div>
           </div>
         </div>
         <div class="calc__result" aria-live="polite">
           <div>
-            <div class="muted" style="color:rgba(255,255,255,.65);font-size:15px;margin-bottom:10px">Estimated net income / year</div>
-            <div class="calc__big" id="o-net">$0</div>
+            <div class="calc__kicker">Net to you, per year</div>
+            <div class="calc__big" id="o-net">฿0</div>
+            <div class="calc__yield"><b id="o-yield">0%</b> net yield · <span id="o-month">฿0</span> a month on average</div>
           </div>
+          <div class="calc__months vbars vbars--mini" id="o-months" aria-hidden="true"></div>
           <div class="calc__rows">
-            <div class="calc__row"><span>Gross rental income</span><b id="o-gross">$0</b></div>
-            <div class="calc__row"><span>Management &amp; running costs (30%)</span><b id="o-costs">$0</b></div>
-            <div class="calc__row"><span>Net yield</span><b id="o-yield">0%</b></div>
+            <div class="calc__row"><span>Paid by guests</span><b id="o-gross">฿0</b></div>
+            <div class="calc__row"><span>Booking platforms, 15%</span><b id="o-ota">฿0</b></div>
+            <div class="calc__row"><span>Cleaning, linen and utilities, 10%</span><b id="o-clean">฿0</b></div>
+            <div class="calc__row"><span>Fortune House, 20% after platforms</span><b id="o-fee">฿0</b></div>
+            <div class="calc__row"><span>Building fees and insurance</span><b id="o-fixed">฿0</b></div>
           </div>
-          <button type="button" class="btn btn--light btn--arrow" data-open="contact" data-title="Get a precise forecast" data-sub="Leave your contact — we’ll send a detailed forecast for real units that match your budget." data-submit="Get my forecast">
-            Get a precise forecast
+          <button type="button" class="btn btn--light btn--arrow" data-open="contact" data-kind="forecast" data-title="Get 5–8 units with a forecast" data-sub="Leave your contact and budget. Within two working days you get units available now, each with a 12-month income forecast built from our own booking data." data-submit="Get my units">
+            Get units with a forecast
             <span class="btn__arrow"><i data-icon="arrow-pair" data-size="18"></i></span>
           </button>
-          <p class="calc__note">Illustrative estimate only, not financial advice.</p>
+          <p class="calc__note">An estimate, not a promise or financial advice. It doesn’t include income tax, purchase costs or any mortgage.</p>
         </div>
       </div>
     </div>
   </section>
 
+  <!-- FAQ -->
   <section class="card section" aria-labelledby="faq-title">
     <div class="container">
       <div class="section-head">
         <div class="section-head__title" data-reveal>
           <span class="eyebrow">FAQ</span>
-          <h2 class="h2" id="faq-title">Questions <b>investors ask</b></h2>
+          <h2 class="h2" id="faq-title">Buying and owning <b>as a foreigner</b></h2>
         </div>
       </div>
       <div class="faq" data-stagger=".06">
-        <div class="faq__item"><button type="button" class="faq__q" aria-expanded="false">Can foreigners own property in Thailand?<span class="faq__plus"><i data-icon="plus" data-size="18"></i></span></button><div class="faq__a"><div><p>Foreigners can own condominium units freehold within the foreign quota of a building. Villas are usually held through a long-term lease or a company structure. Our partner lawyers explain the options for your case.</p></div></div></div>
-        <div class="faq__item"><button type="button" class="faq__q" aria-expanded="false">What does management cost?<span class="faq__plus"><i data-icon="plus" data-size="18"></i></span></button><div class="faq__a"><div><p>Management is a share of rental income, so we only earn when you do. Exact terms depend on the property type and model — we share them before you commit. [Add real fee structure.]</p></div></div></div>
-        <div class="faq__item"><button type="button" class="faq__q" aria-expanded="false">How and when do I receive payouts?<span class="faq__plus"><i data-icon="plus" data-size="18"></i></span></button><div class="faq__a"><div><p>Payouts are sent monthly to your bank account together with a report on bookings, income and expenses.</p></div></div></div>
-        <div class="faq__item"><button type="button" class="faq__q" aria-expanded="false">Can I stay in my property myself?<span class="faq__plus"><i data-icon="plus" data-size="18"></i></span></button><div class="faq__a"><div><p>Yes. With the managed rental model you block your own dates in advance, and we rent the property out the rest of the time.</p></div></div></div>
-        <div class="faq__item"><button type="button" class="faq__q" aria-expanded="false">Do I need to be in Thailand to buy?<span class="faq__plus"><i data-icon="plus" data-size="18"></i></span></button><div class="faq__a"><div><p>No. Viewings can be done by video, and the purchase can be completed remotely with a power of attorney.</p></div></div></div>
+        <div class="faq__item"><button type="button" class="faq__q" aria-expanded="false">Can a foreigner own property in Thailand?<span class="faq__plus"><i data-icon="plus" data-size="18"></i></span></button><div class="faq__a"><div><p>A condominium unit, yes, freehold in your own name, as long as foreign owners hold no more than 49% of the building’s floor area and the money is transferred from abroad. Land can’t be owned by a foreigner, so houses and villas are usually bought on a registered 30-year lease or through a Thai company. Our partner lawyers explain which structure suits you before you sign anything.</p></div></div></div>
+        <div class="faq__item"><button type="button" class="faq__q" aria-expanded="false">What does buying cost on top of the price?<span class="faq__plus"><i data-icon="plus" data-size="18"></i></span></button><div class="faq__a"><div><p>The Land Office charges a 2% transfer fee on the appraised value, which buyer and seller often split. Specific business tax of 3.3% or stamp duty of 0.5%, plus withholding tax, are normally the seller’s. For a buyer, 1–2% of the price usually covers it, plus a fixed fee for legal due diligence that our lawyers agree with you upfront.</p></div></div></div>
+        <div class="faq__item"><button type="button" class="faq__q" aria-expanded="false">Are short stays legal?<span class="faq__plus"><i data-icon="plus" data-size="18"></i></span></button><div class="faq__a"><div><p>Stays under 30 days need a hotel licence, and many condo buildings forbid them in their rules. We take short-stay guests only in buildings and villas where that is allowed and licensed. Anywhere else we rent month by month. We check this before you buy, not after.</p></div></div></div>
+        <div class="faq__item"><button type="button" class="faq__q" aria-expanded="false">How is rental income taxed?<span class="faq__plus"><i data-icon="plus" data-size="18"></i></span></button><div class="faq__a"><div><p>Rent earned in Thailand is subject to Thai income tax. For owners who live abroad, 15% is usually withheld before the payout unless a tax treaty sets a lower rate. We withhold and file it and send you the certificates, so you can claim credit at home.</p></div></div></div>
+        <div class="faq__item"><button type="button" class="faq__q" aria-expanded="false">Can I stay in my property?<span class="faq__plus"><i data-icon="plus" data-size="18"></i></span></button><div class="faq__a"><div><p>Yes. With managed rental you block your dates in the owner account. Book them early for December–February, because that is when the unit earns the most. With the fixed model, owner stays are up to three weeks a year between May and October.</p></div></div></div>
+        <div class="faq__item"><button type="button" class="faq__q" aria-expanded="false">What if I want to sell later?<span class="faq__plus"><i data-icon="plus" data-size="18"></i></span></button><div class="faq__a"><div><p>A unit with two or three years of rental history sells faster, because a buyer can see real income instead of a forecast. We prepare that history, list the unit with partner agents and keep it rented until the transfer.</p></div></div></div>
+        <div class="faq__item"><button type="button" class="faq__q" aria-expanded="false">Do I need to be in Thailand to buy?<span class="faq__plus"><i data-icon="plus" data-size="18"></i></span></button><div class="faq__a"><div><p>No. Viewings can be done by video call, contracts signed remotely, and the transfer completed through a power of attorney notarised in your home country.</p></div></div></div>
       </div>
+
+      <ol class="sources" id="sources">
+        <li id="src-1">Ministry of Tourism and Sports, international arrivals 2025, via <a href="https://portail-asie.com/en/thailand-tourist-arrivals-2025/" target="_blank" rel="noopener">Portail Asie</a></li>
+        <li id="src-2"><a href="https://content.knightfrank.com/research/2972/documents/en/bangkok-phuket-hotel-market-1h-2025-12388.pdf" target="_blank" rel="noopener">Knight Frank, Bangkok &amp; Phuket Hotel Market 1H 2025</a></li>
+        <li id="src-3"><a href="https://www.globalpropertyguide.com/asia/thailand/rental-yields" target="_blank" rel="noopener">Global Property Guide, Thailand rental yields, Q3 2026</a></li>
+        <li id="src-4"><a href="https://airbtics.com/short-term-rental-market-report-2025-thailand" target="_blank" rel="noopener">Airbtics, Thailand Short-Term Rental Market Review 2025</a></li>
+      </ol>
     </div>
   </section>
 
@@ -219,14 +369,15 @@
     <div class="cta-band__bg media"><img data-photo="v16" data-w="2200" alt="Modern house at dusk" loading="lazy"></div>
     <div class="cta-band__scrim" aria-hidden="true"></div>
     <div class="cta-band__content" data-reveal>
-      <span class="eyebrow">Free consultation</span>
-      <h2 class="h2" id="cta-title">Let’s find your <b>first property</b></h2>
-      <p class="lead">A 30-minute call with an advisor: budget, locations, models and real numbers for units available now.</p>
+      <span class="eyebrow">Free 30-minute call</span>
+      <h2 class="h2" id="cta-title">5–8 units for your budget, <b>each with a forecast</b></h2>
+      <p class="lead">An advisor goes through units available now: what each one earned or should earn, and what owning it costs in fees and taxes. You decide afterwards.</p>
       <div class="cta-band__actions">
-        <button type="button" class="btn btn--light btn--arrow" data-open="contact" data-title="Book a consultation" data-sub="Tell us your budget and goals — an advisor will call you back with options that fit." data-submit="Book a consultation">
-          Book a consultation
+        <button type="button" class="btn btn--light btn--arrow" data-open="contact" data-kind="investor" data-title="Talk to an investment advisor" data-sub="Tell us your budget and what you want from the property. An advisor will call you back with units that fit and the numbers behind them." data-submit="Request a call">
+          Book a call
           <span class="btn__arrow"><i data-icon="arrow-pair" data-size="18"></i></span>
         </button>
+        <a class="btn btn--ghost btn--ghost-dark" href="#results">Owner results</a>
       </div>
     </div>
   </section>
@@ -239,7 +390,7 @@
           <span class="logo__mark"><i data-icon="logo" data-size="20" data-sw="1.8"></i></span>
           Fortune House
         </a>
-        <p>Premium apartments and villas for rent across Thailand. Hand-picked, verified and fully serviced.</p>
+        <p>Apartments and villas for rent in 10 Thai cities. Every home checked in person, support 24/7 in English, Russian and Thai.</p>
         <div class="socials">
           <a class="icon-btn icon-btn--sm" href="#" aria-label="Instagram"><i data-icon="instagram" data-size="18"></i></a>
           <a class="icon-btn icon-btn--sm" href="#" aria-label="Telegram"><i data-icon="telegram" data-size="18"></i></a>

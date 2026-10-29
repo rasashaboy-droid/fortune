@@ -866,7 +866,7 @@
       return '<button type="button" class="chip" role="radio" data-fcity="' + esc(c.id) + '">' + esc(c.name) + '</button>';
     }).join('');
     var body =
-      '<p class="muted" style="margin-bottom:22px">Tell us where, when and who — we’ll show apartments that fit.</p>' +
+      '<p class="muted" style="margin-bottom:22px">Pick a city, dates and guests to see homes that are free and fit everyone.</p>' +
       '<div class="m-block"><div class="m-label"><span>Where to?</span></div><div class="chips" role="radiogroup" aria-label="City">' + chips + '</div></div>' +
       '<div class="m-block"><div class="m-label"><span>When?</span><span class="cal__summary" data-fsum></span></div><div data-fcal></div></div>' +
       '<div class="m-block"><div class="m-label"><span>Who’s coming?</span></div><div data-fguests>' + guestsHTML() + '</div></div>';
@@ -907,8 +907,8 @@
       '<button type="submit" class="btn btn--primary btn--block btn--arrow" style="margin-top:18px"><span data-csubmit>Send request</span><span class="btn__arrow">' + btnArrow() + '</span></button>' +
       '<p class="form-note" style="margin-top:12px;text-align:center">By sending, you agree to our <a href="privacy.html">Privacy Policy</a>.</p>' +
       '</form>' +
-      '<div class="success" hidden><div class="success__icon"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></div><h3 class="h3">Thank you — request received</h3><p class="muted">Our team will get back to you within one hour during working time (9:00–21:00, GMT+7).</p><button type="button" class="btn btn--primary" data-close style="margin-top:8px">Done</button></div>';
-    var m = Modal.build('request', { title: 'Get a personal selection', body: body, size: 'sm' });
+      '<div class="success" hidden><div class="success__icon"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></div><h3 class="h3">Request received</h3><p class="muted">A manager will reply within an hour. Requests sent after 21:00 Bangkok time are answered by 10:00 the next morning.</p><button type="button" class="btn btn--primary" data-close style="margin-top:8px">Done</button></div>';
+    var m = Modal.build('request', { title: 'Get 3–5 options within an hour', body: body, size: 'sm' });
     var form = $('form', m), ok = $('.success', m), err = $('[data-cerr]', m), submit = $('button[type=submit]', form);
     var kind = 'selection';
     $$('.input', form).forEach(function (i) { i.addEventListener('input', function () { i.classList.remove('is-invalid'); }); });
@@ -1252,6 +1252,8 @@
     if (track) {
       // the same value-first mix as the search page: budget and mid-range gems, a few luxury stays
       var items = Repo.search({ sort: 'recommended' }).slice(0, 10);
+      var fmin = Math.min.apply(null, items.map(function (a) { return a.price; }).filter(Boolean));
+      if (isFinite(fmin)) $$('[data-stat="featured-min"]').forEach(function (el) { el.textContent = money(fmin); });
       renderCards(track, items, {});
       initCarousel($('#featured'));
     }
@@ -1601,12 +1603,12 @@
         count.innerHTML = '<b>' + list.length + '</b> saved';
         if (crumb) crumb.textContent = 'Saved';
       } else {
-        title.textContent = s.city ? 'Apartments in ' + Repo.cityName(s.city) : 'Apartments across Thailand';
+        title.textContent = 'Apartments and villas for rent in ' + (s.city ? Repo.cityName(s.city) : 'Thailand');
         sub.textContent = (s.checkin && s.checkout ? fmtRange(s.checkin, s.checkout) + ' · ' + plural(nights, 'night') : 'Any dates') + ' · ' + guestsLabel(s);
         count.innerHTML = '<b>' + list.length + '</b> ' + (list.length === 1 ? 'stay' : 'stays');
         if (crumb) crumb.textContent = 'Apartments';
       }
-      doc.title = title.textContent + ' — Fortune House';
+      doc.title = title.textContent + ' | Fortune House';
 
       var paint = function () {
         if (append && shown && list.length) {
@@ -1667,7 +1669,7 @@
       return;
     }
     var cityName = Repo.cityName(a.city);
-    doc.title = a.title + ' — ' + cityName + ' — Fortune House';
+    doc.title = a.title + ' · ' + a.type + ' for rent in ' + cityName + ' | Fortune House';
     var md = $('meta[name="description"]');
     if (md) md.setAttribute('content', (a.text || a.title).slice(0, 155));
     var set = function (sel, html) { $$(sel).forEach(function (el) { el.innerHTML = html; }); };
@@ -1683,7 +1685,7 @@
       var chips = (Repo.isGuestFav(a) ? '<li class="hl hl--ink">' + icon('award', 15, 1.8) + 'Guest favourite</li>' : '') + a.highlights.map(function (k) { return hlChip(k, 15); }).join('');
       if (chips) hlBox.innerHTML = chips; else hlBox.remove();
     }
-    set('[data-apt="text"]', (a.text ? '<p>' + esc(a.text) + '</p>' : '') + '<p style="margin-top:14px">Every Fortune House apartment is inspected in person before it is listed, professionally cleaned between stays and backed by our local team. Linen, towels, Wi-Fi and utilities are included in the price.</p>');
+    set('[data-apt="text"]', (a.text ? '<p>' + esc(a.text) + '</p>' : '') + '<p style="margin-top:14px">Our manager checked this home in person before listing it, and it is cleaned between every stay. Linen, towels, Wi-Fi, electricity and water are included in the price.</p>');
     set('[data-apt="facts"]',
       [a.beds ? [a.beds, plural(a.beds, 'Bedroom').replace(/^\d+ /, ''), 'bed'] : ['Studio', 'Layout', 'bed'],
         [a.baths, plural(a.baths, 'Bathroom').replace(/^\d+ /, ''), 'bath'], [a.guests, 'Guests max', 'users'], [a.size ? a.size + ' m²' : '—', 'Living space', 'area']].map(function (f) {
@@ -1893,35 +1895,225 @@
     initCarousel($('#similar'));
   }
 
+  /* ---- small chart tooltip, shared by every chart on the page ---- */
+  var ChartTip = {
+    el: null, cur: null,
+    init: function () {
+      if (this.el) return;
+      var el = this.el = doc.createElement('div');
+      el.className = 'ctip'; el.setAttribute('role', 'tooltip');
+      doc.body.appendChild(el);
+      var self = this;
+      var place = function () {
+        if (!self.cur) return;
+        var r = self.cur.getBoundingClientRect(), w = el.offsetWidth, h = el.offsetHeight;
+        var left = Math.max(8, Math.min(r.left + r.width / 2 - w / 2, doc.documentElement.clientWidth - w - 8));
+        el.style.left = (left + window.scrollX) + 'px';
+        el.style.top = (r.top + window.scrollY - h - 10) + 'px';
+      };
+      var show = function (t) {
+        var mark = t.closest('[data-tip]');
+        if (!mark || !mark.getAttribute('data-tip')) return;
+        self.cur = mark;
+        el.innerHTML = mark.getAttribute('data-tip');
+        el.classList.add('is-on');
+        place();
+      };
+      var hide = function () { self.cur = null; el.classList.remove('is-on'); };
+      var touch = false; // on touch screens a tap toggles the tooltip; ignore the emulated mouse events
+      doc.addEventListener('mouseover', function (ev) { if (!touch && ev.target.closest('[data-tip]')) show(ev.target); });
+      doc.addEventListener('mouseout', function (ev) {
+        if (touch) return;
+        var from = ev.target.closest('[data-tip]'), to = ev.relatedTarget && ev.relatedTarget.closest && ev.relatedTarget.closest('[data-tip]');
+        if (from && from !== to) hide();
+      });
+      doc.addEventListener('focusin', function (ev) { if (ev.target.closest('[data-tip]')) show(ev.target); });
+      doc.addEventListener('focusout', function (ev) { if (!touch && ev.target.closest('[data-tip]')) hide(); });
+      window.addEventListener('scroll', place, { passive: true });
+      window.addEventListener('resize', hide);
+      doc.addEventListener('pointerdown', function (ev) {
+        touch = ev.pointerType !== 'mouse';
+        if (touch) { if (ev.target.closest('[data-tip]')) show(ev.target); else hide(); }
+      }, true);
+    }
+  };
+  function fmtM(n) { return (n / 1e6).toFixed(2).replace(/\.?0+$/, '') + 'M'; }
+  function kTHB(n) { return n >= 1e6 ? '฿' + (n / 1e6).toFixed(2).replace(/0$/, '') + 'M' : '฿' + Math.round(n / 1000) + 'k'; }
+
+  /* share of a year's income by month, Jan..Dec */
+  var SEASON = {
+    phuket: [.125, .115, .10, .085, .055, .055, .075, .08, .05, .055, .09, .115],
+    bangkok: [.10, .09, .085, .08, .075, .075, .08, .08, .065, .08, .09, .10],
+    pattaya: [.11, .10, .09, .085, .07, .07, .08, .08, .065, .07, .085, .095],
+    samui: [.10, .10, .095, .095, .085, .085, .095, .10, .07, .05, .045, .08],
+    chiangmai: [.12, .11, .08, .075, .06, .06, .065, .065, .06, .08, .105, .12],
+    huahin: [.11, .10, .095, .09, .07, .07, .075, .075, .065, .075, .085, .09]
+  };
+  /* the owner economics used everywhere on the page */
+  function economics(adr, occ, price, fixed) {
+    var gross = adr * 365 * occ, ota = gross * 0.15, clean = gross * 0.10, fee = (gross - ota) * 0.20;
+    fixed = fixed != null ? fixed : Math.max(24000, price * 0.006);
+    var net = gross - ota - clean - fee - fixed;
+    return { gross: gross, ota: ota, clean: clean, fee: fee, fixed: fixed, net: net, yield: price ? net / price * 100 : 0 };
+  }
+
+  /* vertical bars with a baseline, hairline grid, selective labels and hover/focus tooltips */
+  function vbars(el, items, opts) {
+    opts = opts || {};
+    var max = opts.max || Math.max.apply(null, items.map(function (x) { return x.v; }));
+    var ticks = opts.ticks || [];
+    var hi = items.reduce(function (a, b, i) { return b.v > items[a].v ? i : a; }, 0);
+    var lo = items.reduce(function (a, b, i) { return b.v < items[a].v ? i : a; }, 0);
+    el.innerHTML =
+      (ticks.length ? '<div class="vbars__grid">' + ticks.map(function (t) { return '<span style="bottom:' + (t / max * 100) + '%"><i>' + (opts.tickFmt ? opts.tickFmt(t) : t) + '</i></span>'; }).join('') + '</div>' : '') +
+      '<div class="vbars__plot">' + items.map(function (x, i) {
+        var lab = (i === hi || i === lo) && opts.label ? '<em>' + opts.label(x.v) + '</em>' : '';
+        return '<div class="vbars__col"><span class="vbars__bar' + (x.on ? ' is-on' : '') + '" tabindex="0" data-tip="' + esc(x.tip) + '" style="height:' + (x.v / max * 100) + '%">' + lab + '</span><span class="vbars__x">' + (x.k.length > 1 ? '<span class="vbars__xl">' + esc(x.k) + '</span><span class="vbars__xs">' + esc(x.k.charAt(0)) + '</span>' : esc(x.k)) + '</span></div>';
+      }).join('') + '</div>';
+  }
+
   function pageInvestors() {
+    ChartTip.init();
+
+    // night strips (hero card + statement)
+    $$('.nights').forEach(function (el) {
+      var free = el.getAttribute('data-nights').split(',').map(Number), labels = el.hasAttribute('data-labels');
+      var html = '';
+      for (var d = 1; d <= 31; d++) html += '<i class="' + (free.indexOf(d) > -1 ? '' : 'is-booked') + '">' + (labels ? d : '') + '</i>';
+      el.innerHTML = html;
+    });
+
+    // arrivals by month, 2025 (Ministry of Tourism and Sports)
+    var ARR = [['Jan', 3709102, 18.2], ['Feb', 3119450, 12.5], ['Mar', 2720460, 8.3], ['Apr', 2547120, 6.1], ['May', 2266570, -3.2], ['Jun', 2322770, -1.8],
+      ['Jul', 2610370, 2.4], ['Aug', 2583640, 1.9], ['Sep', 2235850, -2.5], ['Oct', 2573740, 3.7], ['Nov', 2910210, 10.2], ['Dec', 3375039, 15.8]];
+    var MONTH = { Jan: 'January', Feb: 'February', Mar: 'March', Apr: 'April', May: 'May', Jun: 'June', Jul: 'July', Aug: 'August', Sep: 'September', Oct: 'October', Nov: 'November', Dec: 'December' };
+    var ca = $('#chart-arrivals');
+    if (ca) vbars(ca, ARR.map(function (m) {
+      return { k: m[0], v: m[1], on: ['Nov', 'Dec', 'Jan', 'Feb', 'Mar'].indexOf(m[0]) > -1, tip: '<b>' + MONTH[m[0]] + '</b> ' + fmtM(m[1]) + ' visitors<br><span>' + (m[2] > 0 ? '+' : '') + m[2] + '% vs 2024</span>' };
+    }), { max: 4000000, ticks: [1000000, 2000000, 3000000, 4000000], tickFmt: function (t) { return t / 1e6 + 'M'; }, label: function (v) { return fmtM(v); } });
+
+    // revenue per listing by market, 2025 (Airbtics) + our Phuket homes
+    var CITIES = [
+      { k: 'Fortune House homes, Phuket', rev: 1025000, adr: 3650, occ: 77, ours: true },
+      { k: 'Phuket, market average', rev: 721187, adr: 3001, occ: 65 },
+      { k: 'Thailand, market average', rev: 623871, adr: 2679, occ: 62.7 },
+      { k: 'Bangkok, market average', rev: 439976, adr: 1815, occ: 65 },
+      { k: 'Pattaya, market average', rev: 388796, adr: 1741, occ: 60 }
+    ];
+    var cc = $('#chart-cities');
+    if (cc) {
+      var cmax = 1100000;
+      cc.innerHTML = '<div class="hbars__head"><span></span><span>Revenue a year</span><span>Nightly rate</span><span>Occupancy</span></div>' + CITIES.map(function (c) {
+        return '<div class="hbars__row' + (c.ours ? ' is-ours' : '') + '"><span class="hbars__k">' + esc(c.k) + '</span>' +
+          '<span class="hbars__track"><span class="hbars__bar" tabindex="0" data-tip="<b>' + esc(c.k) + '</b> ' + money(c.rev) + ' a year<br><span>' + money(c.adr) + ' a night · ' + c.occ + '% occupancy</span>" style="width:' + (c.rev / cmax * 100) + '%"></span><b>' + kTHB(c.rev) + '</b></span>' +
+          '<span class="hbars__n">' + money(c.adr) + '</span><span class="hbars__n">' + c.occ + '%</span></div>';
+      }).join('');
+    }
+
+    // owner case studies
+    var CASES = [
+      { photo: 'caseKata', title: '1BR condo · Kata, Phuket', bought: 'Bought in 2023 for ฿5.9M', price: 5900000, adr: 2950, occ: 0.77, fixed: 30000, season: 'phuket',
+        note: 'Sea view, shared infinity pool, 600 m to the beach. December and January alone paid for a quarter of the year.' },
+      { photo: 'caseAsok', title: 'Studio · Asok, Bangkok', bought: 'Bought in 2024 for ฿3.9M', price: 3900000, adr: 1750, occ: 0.82, fixed: 24000, season: 'bangkok',
+        note: '38 m² on the 31st floor, three minutes from BTS Asok. Business travellers keep it busy all year, so the months are even.' },
+      { photo: 'caseSamui', title: '3BR pool villa · Bophut, Koh Samui', bought: 'Bought in 2022 for ฿21.5M', price: 21500000, adr: 11800, occ: 0.63, fixed: 160000, season: 'samui',
+        note: 'Private pool and a sea view. Samui’s season runs the other way: the rains come in November, July and August are strong.' }
+    ];
+    var order = [9, 10, 11, 0, 1, 2, 3, 4, 5, 6, 7, 8]; // October 2025 → September 2026
+    var MON1 = ['J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'];
+    var MONS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    var cs = $('#cases');
+    if (cs) {
+      cs.innerHTML = CASES.map(function (c, i) {
+        var e = economics(c.adr, c.occ, c.price, c.fixed);
+        return '<article class="case" data-reveal style="--d:' + (i * 0.08) + 's">' +
+          '<div class="case__media media"><img data-photo="' + c.photo + '" data-w="1000" alt="' + esc(c.title) + '" loading="lazy"></div>' +
+          '<div class="case__body"><h3 class="case__title">' + esc(c.title) + '</h3><p class="case__bought">' + esc(c.bought) + '</p>' +
+          '<dl class="case__kpis"><div class="is-main"><dt>Net to owner</dt><dd>' + kTHB(e.net) + '<small> / year</small></dd></div><div><dt>Net yield</dt><dd>' + e.yield.toFixed(1) + '%</dd></div>' +
+          '<div><dt>Occupancy</dt><dd>' + Math.round(c.occ * 100) + '%</dd></div><div><dt>Average rate</dt><dd>' + money(c.adr) + '</dd></div></dl>' +
+          '<div class="case__chart"><div class="case__chart-head"><span>Monthly payout</span><span>Oct 2025 – Sep 2026</span></div><div class="vbars vbars--mini" data-case="' + i + '"></div></div>' +
+          '<p class="case__note">' + esc(c.note) + '</p></div></article>';
+      }).join('');
+      CASES.forEach(function (c, i) {
+        var e = economics(c.adr, c.occ, c.price, c.fixed), w = SEASON[c.season];
+        var el = $('[data-case="' + i + '"]', cs);
+        vbars(el, order.map(function (m, j) {
+          var v = e.net * w[m], year = j < 3 ? 2025 : 2026;
+          return { k: MON1[m], v: v, on: true, tip: '<b>' + MONS[m] + ' ' + year + '</b> ' + money(v) };
+        }), { label: function (v) { return kTHB(v); } });
+      });
+      setupImages(cs);
+      initReveal(cs);
+    }
+
+    // fee bar
+    var FEES = [['Owner', 54], ['Fortune House', 17], ['Booking platforms', 15], ['Cleaning, linen and utilities', 10], ['Building fees and insurance', 4]];
+    var fb = $('#feebar'), fl = $('#feebar-legend');
+    if (fb && fl) {
+      fb.innerHTML = FEES.map(function (f, i) { return '<span class="feebar__seg feebar__seg--' + i + '" style="flex:' + f[1] + '" tabindex="0" data-tip="<b>' + esc(f[0]) + '</b> ฿' + f[1] + ' of every ฿100">' + (f[1] >= 10 ? '<em>฿' + f[1] + '</em>' : '') + '</span>'; }).join('');
+      fl.innerHTML = FEES.map(function (f, i) { return '<li><i class="feebar__seg--' + i + '"></i><span>' + esc(f[0]) + '</span><b>฿' + f[1] + '</b></li>'; }).join('');
+    }
+
+    // calculator
     var calc = $('#calc');
     if (!calc) return;
+    var PRESETS = [
+      { k: 'Phuket', price: 7500000, adr: 3650, occ: 77, season: 'phuket' }, { k: 'Bangkok', price: 4500000, adr: 1950, occ: 80, season: 'bangkok' },
+      { k: 'Pattaya', price: 3800000, adr: 1900, occ: 74, season: 'pattaya' }, { k: 'Koh Samui', price: 14000000, adr: 6500, occ: 70, season: 'samui' },
+      { k: 'Chiang Mai', price: 3200000, adr: 1600, occ: 68, season: 'chiangmai' }, { k: 'Hua Hin', price: 4200000, adr: 2400, occ: 66, season: 'huahin' }
+    ];
+    var city = PRESETS[0];
+    var chips = $('#calc-city');
+    chips.innerHTML = PRESETS.map(function (p, i) { return '<button type="button" class="chip chip--sm" role="radio" data-ci="' + i + '" aria-checked="' + (i === 0) + '">' + p.k + '</button>'; }).join('');
     var r = { price: $('#r-price', calc), rate: $('#r-rate', calc), occ: $('#r-occ', calc) };
-    var shown = { gross: 0, net: 0, costs: 0, yield: 0 };
+    var monthsEl = $('#o-months');
+    var shown = { net: 0, gross: 0, ota: 0, clean: 0, fee: 0, fixed: 0, yield: 0 };
     var raf;
     function fill(input) { input.style.setProperty('--p', ((input.value - input.min) / (input.max - input.min) * 100) + '%'); }
     function compute() {
       var price = +r.price.value, rate = +r.rate.value, occ = +r.occ.value / 100;
-      $('#v-price').textContent = usd(price);
-      $('#v-rate').textContent = usd(rate);
+      $('#v-price').textContent = '฿' + (price / 1e6).toFixed(1).replace(/\.0$/, '') + 'M';
+      $('#v-rate').textContent = money(rate);
       $('#v-occ').textContent = Math.round(occ * 100) + '%';
       Object.keys(r).forEach(function (k) { fill(r[k]); });
-      var gross = rate * 365 * occ, costs = gross * 0.3, net = gross - costs;
-      var target = { gross: gross, net: net, costs: costs, yield: price ? net / price * 100 : 0 };
-      var from = { gross: shown.gross, net: shown.net, costs: shown.costs, yield: shown.yield };
+      var e = economics(rate, occ, price);
+      var target = { net: e.net, gross: e.gross, ota: e.ota, clean: e.clean, fee: e.fee, fixed: e.fixed, yield: e.yield };
+      var from = {}; for (var k0 in shown) from[k0] = shown[k0];
       var t0 = null;
       cancelAnimationFrame(raf);
       (function frame(t) {
         if (!t0) t0 = t;
-        var p = reduceMotion ? 1 : Math.min(1, (t - t0) / 450), e = 1 - Math.pow(1 - p, 3);
-        for (var k in target) shown[k] = from[k] + (target[k] - from[k]) * e;
-        $('#o-net').textContent = usd(shown.net);
-        $('#o-gross').textContent = usd(shown.gross);
-        $('#o-costs').textContent = '−' + usd(shown.costs);
+        var p = reduceMotion ? 1 : Math.min(1, (t - t0) / 450), ez = 1 - Math.pow(1 - p, 3);
+        for (var k in target) shown[k] = from[k] + (target[k] - from[k]) * ez;
+        $('#o-net').textContent = (shown.net < 0 ? '−' : '') + money(Math.abs(shown.net));
+        $('#o-month').textContent = money(Math.max(0, shown.net) / 12);
         $('#o-yield').textContent = shown.yield.toFixed(1) + '%';
+        $('#o-gross').textContent = money(shown.gross);
+        $('#o-ota').textContent = '−' + money(shown.ota);
+        $('#o-clean').textContent = '−' + money(shown.clean);
+        $('#o-fee').textContent = '−' + money(shown.fee);
+        $('#o-fixed').textContent = '−' + money(shown.fixed);
         if (p < 1) raf = requestAnimationFrame(frame);
       })(performance.now());
+      var w = SEASON[city.season], net = Math.max(0, e.net);
+      var bars = $$('.vbars__bar', monthsEl);
+      if (bars.length !== 12) {
+        vbars(monthsEl, w.map(function (x, m) { return { k: MON1[m], v: net * x, on: true, tip: '' }; }), { max: net * 0.13 || 1 });
+        bars = $$('.vbars__bar', monthsEl);
+      }
+      bars.forEach(function (b, m) {
+        b.style.height = (w[m] / 0.13 * 100) + '%';
+        b.setAttribute('data-tip', '<b>' + MONS[m] + '</b> ' + money(net * w[m]));
+      });
     }
+    chips.addEventListener('click', function (ev) {
+      var b = ev.target.closest('[data-ci]');
+      if (!b) return;
+      city = PRESETS[+b.getAttribute('data-ci')];
+      $$('[data-ci]', chips).forEach(function (x) { x.setAttribute('aria-checked', String(x === b)); });
+      r.price.value = city.price; r.rate.value = city.adr; r.occ.value = city.occ;
+      compute();
+    });
     Object.keys(r).forEach(function (k) { r[k].addEventListener('input', compute); });
     compute();
   }
@@ -1942,6 +2134,22 @@
   /* Boot                                                                */
   /* ================================================================== */
 
+  /* catalogue numbers used in the copy stay true when apartments are added or removed */
+  function fillStats() {
+    var all = Repo.all();
+    if (!all.length) return;
+    var prices = all.map(function (a) { return a.price; }).filter(Boolean);
+    var rated = all.filter(function (a) { return a.reviews; });
+    var reviews = all.reduce(function (s, a) { return s + a.reviews; }, 0);
+    var vals = {
+      count: String(all.length),
+      'min-price': prices.length ? money(Math.min.apply(null, prices)) : '',
+      rating: rated.length ? (rated.reduce(function (s, a) { return s + a.rating; }, 0) / rated.length).toFixed(2) : '',
+      reviews: reviews >= 1000 ? (Math.floor(reviews / 500) * 500).toLocaleString('en-US') + '+' : String(reviews)
+    };
+    $$('[data-stat]').forEach(function (el) { var v = vals[el.getAttribute('data-stat')]; if (v) el.textContent = v; });
+  }
+
   function boot() {
     hydrateIcons(doc);
     initHeader();
@@ -1960,6 +2168,7 @@
       var live = favs.filter(function (id) { return Repo.get(id); });
       if (live.length !== favs.length && Repo.all().length) { favs.length = 0; live.forEach(function (id) { favs.push(id); }); lsSet('fh-favs', favs); }
       syncFavCount(false);
+      fillStats();
       setupImages(doc);
       buildFinder();
       var request = buildRequest();
@@ -1972,9 +2181,9 @@
         if (id === 'contact') {
           request._config(
             t.getAttribute('data-kind') || 'selection',
-            t.getAttribute('data-title') || 'Get a personal selection',
-            t.getAttribute('data-sub') || 'Leave your contact and we’ll send 3–5 apartments that match your dates and budget — usually within an hour.',
-            t.getAttribute('data-submit') || 'Send request');
+            t.getAttribute('data-title') || 'Get 3–5 options within an hour',
+            t.getAttribute('data-sub') || 'Leave a phone number, WhatsApp or email. A local manager will send homes that fit your dates and budget, already checked for availability. Free, and you don’t have to book.',
+            t.getAttribute('data-submit') || 'Get my free selection');
           Modal.open(request);
         } else Modal.open(id);
       });
