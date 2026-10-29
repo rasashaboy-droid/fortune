@@ -38,7 +38,7 @@ after dates are picked. Raw data and the generator: `_work/real/*.json`, `_work/
   `FH_CONFIG.api.requests` (POST, JSON) in `data.js`. Until then booking and contact
   requests are kept in the browser under localStorage key `fh-requests` for testing.
 - Home hero photos: `hero` (wide screens) and `heroMobile` (phones and portrait tablets) in `PHOTOS` in `data.js`,
-  now `assets/img/hero-villa.jpg` and `assets/img/hero-villa-m.jpg`. Framing: `--hero-pos` / `--hero-pos-m` on `.hero` in `style.css`.
+  now `assets/img/hero-villa-2.jpg` and `assets/img/hero-villa-m.jpg` (the earlier wide photo `hero-villa.jpg` is kept in the folder). Framing: `--hero-pos` / `--hero-pos-m` on `.hero` in `style.css`.
   On phones the hero shows the headline, two buttons and the photo; "Find an apartment" opens the full search sheet.
 - Styles (colors, radii, spacing at the top in `:root`): `assets/css/style.css`
 - Interactions: `assets/js/main.js`
