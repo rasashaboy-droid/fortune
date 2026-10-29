@@ -370,7 +370,8 @@
         if (cityById[id]) return cityById[id].name;
         return id ? id.replace(/-/g, ' ').replace(/\b\w/g, function (c) { return c.toUpperCase(); }) : '';
       },
-      photo: function (ref, w) { return D.photoUrl(ref, w); }
+      photo: function (ref, w) { return D.photoUrl(ref, w); },
+      hasPhoto: function (key) { return !!(D.photos && D.photos[key]); }
     };
   })();
 
@@ -456,8 +457,19 @@
   /* ---- images: fade in on load, quiet fallback on error ---- */
   function setupImages(root) {
     $$('img[data-photo]', root).forEach(function (img) {
-      img.src = Repo.photo(img.getAttribute('data-photo'), +img.getAttribute('data-w') || 1200);
+      var ref = img.getAttribute('data-photo'), w = +img.getAttribute('data-w') || 1200;
+      var refM = img.getAttribute('data-photo-m');
       img.removeAttribute('data-photo');
+      if (!refM || !Repo.hasPhoto(refM)) { img.src = Repo.photo(ref, w); return; }
+      /* a separate photo for phones (e.g. a vertical hero), swapped when the media query in data-m-media starts or stops matching */
+      var wM = +img.getAttribute('data-w-m') || 1200, mq = window.matchMedia(img.getAttribute('data-m-media') || '(max-width: 719px)');
+      var pick = function () {
+        var src = mq.matches ? Repo.photo(refM, wM) : Repo.photo(ref, w);
+        img.classList.toggle('is-alt', mq.matches);
+        if (img.getAttribute('src') !== src) img.src = src;
+      };
+      pick();
+      if (mq.addEventListener) mq.addEventListener('change', pick); else if (mq.addListener) mq.addListener(pick);
     });
     $$('.media img', root).forEach(function (img) {
       if (img._fh) return;

@@ -55,7 +55,9 @@ window.FH_CONFIG = {
 (function () {
   /* Photos used by the page layouts (hero, banners). Apartments use Unsplash ids directly. */
   var PHOTOS = {
-    hero: '1785512364392-a3ab5a83b254', // white arched villa, sea on the right
+    hero: 'assets/img/hero-villa.jpg', // home hero, wide screens: keep the left side light, the headline sits there
+    heroMobile: 'assets/img/hero-villa-m.jpg',  // home hero on phones (under 720px): a vertical photo, light top 2/3, pool at the bottom.
+                     // Empty '' = phones use "hero" too. Framing: --hero-pos / --hero-pos-m on .hero in style.css
     v9: '1759372945658-1e9f56e751bd',   // villa with a pool at twilight (CTA band)
     v12: '1719887805632-de5be825f72b',  // modern house among palms (investors)
     v13: '1543489822-c49534f3271f',     // sea-view villa (investors)

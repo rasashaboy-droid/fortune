@@ -7,7 +7,7 @@ Static site: plain HTML, CSS and JavaScript, no build step.
 - Any OS: `python -m http.server 8080` in this folder, then open http://localhost:8080
 - Or just open `index.html` in a browser (everything works without a server too).
 
-Photos are loaded from Unsplash, so an internet connection is needed to see them.
+Apartment photos load from Airbnb and Unsplash, so an internet connection is needed to see them. The home hero photos are local, in `assets/img/`.
 
 ## Pages
 - `index.html` — home: hero + search bar + "Choose apartment" popup, carousel, why us, CTA, investors, footer
@@ -37,7 +37,9 @@ after dates are picked. Raw data and the generator: `_work/real/*.json`, `_work/
 - Connecting a backend: set `FH_CONFIG.api.apartments` (GET, JSON list) and
   `FH_CONFIG.api.requests` (POST, JSON) in `data.js`. Until then booking and contact
   requests are kept in the browser under localStorage key `fh-requests` for testing.
-- Hero photo framing: `--hero-pos` on `.hero` in `style.css`.
+- Home hero photos: `hero` (wide screens) and `heroMobile` (phones and portrait tablets) in `PHOTOS` in `data.js`,
+  now `assets/img/hero-villa.jpg` and `assets/img/hero-villa-m.jpg`. Framing: `--hero-pos` / `--hero-pos-m` on `.hero` in `style.css`.
+  On phones the hero shows the headline, two buttons and the photo; "Find an apartment" opens the full search sheet.
 - Styles (colors, radii, spacing at the top in `:root`): `assets/css/style.css`
 - Interactions: `assets/js/main.js`
 - Phone, email and office address in the footer are placeholders in [square brackets].

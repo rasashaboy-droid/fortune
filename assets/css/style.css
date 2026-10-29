@@ -291,7 +291,7 @@ svg { flex-shrink: 0; }
 }
 .is-scrolled .header { box-shadow: 0 0 0 1px rgba(0,0,0,.05), 0 10px 30px rgba(0,0,0,.08); background: rgba(255,255,255,.9); }
 
-.logo { display: inline-flex; align-items: center; gap: 10px; font-weight: 650; font-size: 18px; letter-spacing: -.03em; }
+.logo { display: inline-flex; align-items: center; gap: 10px; font-weight: 650; font-size: 18px; letter-spacing: -.03em; white-space: nowrap; }
 .logo__mark {
   width: 32px; height: 32px; border-radius: 10px;
   background: var(--ink); color: #fff;
@@ -428,7 +428,7 @@ svg { flex-shrink: 0; }
 .hero__bg img.is-loaded { transform: scale(1); }
 .hero__content { display: flex; flex-direction: column; gap: 20px; max-width: 640px; }
 .hero__content .lead { max-width: 470px; color: #3d3d3b; }
-@media (min-width: 720px) { .hero { --hero-pos: 50% 50%; } }
+@media (min-width: 720px) { .hero { --hero-pos: 70% 50%; } }
 .hero__ctas { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 8px; }
 .hero__bottom { margin-top: auto; padding-top: 220px; }
 
@@ -1346,9 +1346,11 @@ textarea.input { height: 110px; padding: 14px 18px; resize: none; line-height: 1
 
 /* fixes */
 .tick, .float-chip__icon, .opt__icon, .amenity__icon, .sb-field__icon, .why-item__icon, .opt__check { flex-shrink: 0; }
+/* phones: stacked full-width buttons, every label centred, the arrow badge pinned to the right edge */
 @media (max-width: 559px) {
-  .hero__ctas, .cta-band__actions, .invest__actions { flex-direction: column; align-items: stretch; }
-  .hero__ctas .btn--arrow, .cta-band__actions .btn--arrow, .invest__actions .btn--arrow { justify-content: space-between; padding-left: 24px; }
+  .hero__ctas, .cta-band__actions, .invest__actions { flex-direction: column; align-items: stretch; gap: 10px; }
+  .hero__ctas .btn, .cta-band__actions .btn, .invest__actions .btn { --h: 54px; width: 100%; justify-content: center; padding: 0 58px; font-size: 15.5px; }
+  .hero__ctas .btn__arrow, .cta-band__actions .btn__arrow, .invest__actions .btn__arrow { position: absolute; right: var(--bo); top: 50%; margin-top: calc(var(--bs) / -2); }
 }
 .apt-layout { padding-left: 0; padding-right: 0; }
 @media (min-width: 720px) { .gallery__counter { display: none; } }
@@ -1804,12 +1806,81 @@ sup a:hover { color: var(--ink); }
 @media (max-width: 559px) { .vbars__xl { display: none; } .vbars__xs { display: inline; } .vbars { padding-left: 30px; } .vbars__plot, .vbars__grid span { left: 30px; } .vbars--mini .vbars__plot { left: 0; } }
 @media (max-width: 759px) { .mtable tbody th { width: auto; } }
 
-/* hero social proof line */
-.hero__proof { display: flex; align-items: center; flex-wrap: wrap; gap: 4px 6px; font-size: 13.5px; color: #4a4a48; margin-top: 2px; max-width: 520px; line-height: 1.45; }
+/* ---------- Home hero: social proof ---------- */
+.hero__proof { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; font-size: 13.5px; line-height: 1.4; color: #3f3f3d; margin-top: 2px; }
 .hero__proof b { color: var(--ink); font-weight: 600; }
-.hero__stars { display: inline-grid; color: var(--ink); }
-@media (max-width: 559px) { .hero__proof { font-size: 13px; } }
+.hero__proof-item {
+  display: inline-flex; align-items: center; gap: 7px; white-space: nowrap;
+  height: 34px; padding: 0 14px 0 11px; border-radius: 999px;
+  background: rgba(255,255,255,.74); box-shadow: inset 0 0 0 1px rgba(0,0,0,.06);
+  -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+}
+.hero__proof-item svg { color: var(--ink); flex-shrink: 0; }
 .hero .h1 { font-size: clamp(40px, 9.6vw, 84px); }
 @media (min-width: 720px) { .hero__content { max-width: 680px; } }
-.hero__proof { display: block; }
-.hero__stars { display: inline-block; vertical-align: -2px; margin-right: 6px; }
+.hero { --hero-pos-m: 56% 100%; }
+.hero__bg img.is-alt { object-position: var(--hero-pos-m); }
+.hero__scrim { position: absolute; inset: 0; z-index: -1; pointer-events: none; }
+/* wide screens: a soft light veil on the left keeps the headline and buttons readable over the photo */
+@media (min-width: 720px) { .hero__scrim { background: linear-gradient(90deg, rgba(243,242,239,.8) 0%, rgba(243,242,239,.58) 36%, rgba(243,242,239,0) 62%); } }
+@media (min-width: 1100px) { .hero__scrim { background: linear-gradient(90deg, rgba(243,242,239,.6) 0%, rgba(243,242,239,.34) 32%, rgba(243,242,239,0) 52%); } }
+/* portrait tablets get the vertical photo (light sky on top), so the veil runs top to bottom */
+@media (min-width: 720px) { .hero:has(.hero__bg img.is-alt) .hero__scrim { background: linear-gradient(180deg, rgba(243,242,239,.6) 0%, rgba(243,242,239,.5) 40%, rgba(243,242,239,0) 62%); } }
+
+/* ---------- Home hero on phones: text on the light top, photo below, one clear action ---------- */
+@media (max-width: 719px) {
+  .hero { min-height: max(600px, calc(100svh - 44px)); padding-top: calc(var(--header-h) + 30px); padding-bottom: 24px; }
+  .hero__scrim { background: linear-gradient(180deg, rgba(243,242,239,.92) 0%, rgba(243,242,239,.84) 46%, rgba(243,242,239,.3) 64%, rgba(243,242,239,0) 76%); }
+  .hero:has(.hero__bg img.is-alt) .hero__scrim { opacity: .62; }
+  .hero__bottom { display: none; } /* "Find an apartment" opens the same search as a full-screen sheet */
+  .hero__content { gap: 16px; }
+  .hero .eyebrow { font-size: 11.5px; letter-spacing: .07em; }
+  .hero .h1 { font-size: clamp(34px, 9.8vw, 44px); line-height: 1; text-wrap: balance; }
+  .hero__content .lead { font-size: 16px; line-height: 1.5; color: #3a3a38; }
+  .hero__ctas { margin-top: 6px; }
+  .hero .btn--ghost { background: rgba(255,255,255,.72); }
+  .hero__proof { font-size: 13px; }
+  .hero__proof-item { height: 32px; padding: 0 12px 0 10px; }
+}
+@media (max-width: 389px) {
+  .hero__proof { gap: 6px; font-size: 12.5px; }
+  .hero__proof-item { padding: 0 10px 0 9px; gap: 6px; }
+}
+/* the smallest phones (320–359px) */
+@media (max-width: 359px) {
+  .logo { font-size: 16px; gap: 8px; }
+  .header .header__saved, .header .burger { width: 42px; height: 42px; }
+  .header { padding-left: 14px; gap: 10px; }
+  .hero__ctas .btn, .cta-band__actions .btn, .invest__actions .btn { padding: 0 20px; font-size: 15px; }
+  .hero__ctas .btn--arrow, .cta-band__actions .btn--arrow, .invest__actions .btn--arrow { padding: 0 54px 0 20px; }
+  .hero .h1 { font-size: 32px; }
+  .hero__content .lead { font-size: 15px; }
+  .hero__scrim { background: linear-gradient(180deg, rgba(243,242,239,.92) 0%, rgba(243,242,239,.84) 56%, rgba(243,242,239,.3) 72%, rgba(243,242,239,0) 84%); }
+}
+
+/* ---------- Home investors block ---------- */
+.invest__list li { display: flex; align-items: flex-start; gap: 12px; }
+.invest__list .tick { width: 24px; height: 24px; margin-top: 0; }
+/* one column: claim, numbers, a real payout, what you get, actions */
+@media (max-width: 999px) {
+  .invest { display: flex; flex-direction: column; gap: 0; }
+  .invest__content { display: contents; }
+  .invest .eyebrow { order: 1; align-self: flex-start; }
+  .invest .h2 { order: 2; margin-top: 16px; }
+  .invest .lead { order: 3; margin-top: 14px; }
+  .invest .stats { order: 4; margin-top: 26px; }
+  .invest__media { order: 5; margin-top: 10px; aspect-ratio: 4 / 3; }
+  .invest__list { order: 6; margin-top: 22px; }
+  .invest__actions { order: 7; margin-top: 26px; }
+}
+@media (max-width: 719px) {
+  .invest .lead { font-size: 16px; line-height: 1.5; }
+  .invest .stats { gap: 0; padding: 16px 0; border-radius: 20px; background: var(--surface-2); }
+  .invest .stat { padding: 0 12px; background: none; border-radius: 0; }
+  .invest .stat + .stat { box-shadow: inset 1px 0 0 rgba(0,0,0,.09); }
+  .invest .stat__val { font-size: 26px; }
+  .invest .stat__label { font-size: 12.5px; }
+  .invest__list li { font-size: 15px; padding: 14px 0; }
+  .invest__media { border-radius: 20px; }
+  .invest .float-chip { font-size: 13.5px; left: 10px; right: 10px; bottom: 10px; }
+}

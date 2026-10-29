@@ -56,12 +56,13 @@
 
   <!-- 1. Hero -->
   <section class="hero card card--clip" aria-label="Introduction">
-    <div class="hero__bg media"><img data-photo="hero" data-w="2400" alt="Minimal white villa with an arched terrace and sea view" fetchpriority="high"></div>
+    <div class="hero__bg media"><img data-photo="hero" data-photo-m="heroMobile" data-m-media="(max-width: 719px), (max-width: 900px) and (orientation: portrait)" data-w="2400" data-w-m="1200" alt="Infinity pool of a hillside villa above a misty bay with limestone islands" fetchpriority="high"></div>
+    <div class="hero__scrim" aria-hidden="true"></div>
 
     <div class="hero__content intro">
-      <span class="eyebrow">Apartments &amp; villas for rent · 10 cities</span>
+      <span class="eyebrow"><span>Apartments &amp; villas<span class="hide-mobile"> for rent</span> · 10 cities</span></span>
       <h1 class="h1">Apartments in Thailand, <b>checked in person</b></h1>
-      <p class="lead"><span data-stat="count">118</span> homes in Phuket, Bangkok, Pattaya and 7 more cities, from <span data-stat="min-price">฿600</span> a night. Electricity, water and Wi-Fi are in the price, and nothing is charged until your dates are confirmed.</p>
+      <p class="lead"><span data-stat="count">118</span> homes in Phuket, Bangkok, Pattaya and 7 more cities, from <span data-stat="min-price">฿600</span> a night. No charge until confirmed booking.</p>
       <div class="hero__ctas">
         <button type="button" class="btn btn--primary btn--arrow" data-open="finder">
           Find an apartment
@@ -69,7 +70,10 @@
         </button>
         <button type="button" class="btn btn--ghost" data-open="contact">Get a free selection</button>
       </div>
-      <p class="hero__proof"><span class="hero__stars" aria-hidden="true"><i data-icon="star" data-size="15"></i></span><b data-stat="rating">4.93</b> average guest rating from <span data-stat="reviews">15,500+</span> reviews · Support 24/7 in English, Russian and Thai</p>
+      <p class="hero__proof">
+        <span class="hero__proof-item"><i data-icon="star" data-size="15"></i><span><b data-stat="rating">4.93</b><span class="hide-mobile"> from</span><span class="hide-desktop"> ·</span> <span data-stat="reviews">15,500+</span><span class="hide-mobile"> guest</span> reviews</span></span>
+        <span class="hero__proof-item"><i data-icon="headset" data-size="16"></i><span>Support 24/7<span class="hide-mobile"> in English, Russian and Thai</span></span></span>
+      </p>
     </div>
 
     <div class="hero__bottom intro-late">
@@ -180,14 +184,14 @@
   <!-- 5. Investors -->
   <section class="card section" id="investors" aria-labelledby="inv-title">
     <div class="container invest">
-      <div class="invest__content" data-reveal>
+      <div class="invest__content" data-stagger="0.06">
         <span class="eyebrow">For investors</span>
-        <h2 class="h2" id="inv-title">Rental property that earns <b>6–8% a year</b></h2>
+        <h2 class="h2" id="inv-title">Rental property that earns <b class="nowrap">6–8% a year</b></h2>
         <p class="lead">That is the net yield our owners made in 2025. We help you choose a unit and run it like a hotel: guests, cleaning, repairs and paperwork. You get a statement and a payout every month.</p>
         <ul class="invest__list">
-          <li><b>One fee, 20% of rental income.</b> No set-up fee, nothing in a month without bookings.</li>
-          <li><b>A statement and payout every month,</b> in baht or to an account abroad.</li>
-          <li><b>Units we would buy ourselves,</b> checked by lawyers for title, quota and licence.</li>
+          <li><span class="tick" aria-hidden="true"><i data-icon="check" data-size="14" data-sw="2.4"></i></span><span><b>One fee, 20% of rental income.</b> No set-up fee, nothing in a month without bookings.</span></li>
+          <li><span class="tick" aria-hidden="true"><i data-icon="check" data-size="14" data-sw="2.4"></i></span><span><b>A statement and payout every month,</b> in baht or to an account abroad.</span></li>
+          <li><span class="tick" aria-hidden="true"><i data-icon="check" data-size="14" data-sw="2.4"></i></span><span><b>Units we would buy ourselves,</b> checked by lawyers for title, quota and licence.</span></li>
         </ul>
         <div class="stats">
           <div class="stat"><div class="stat__val" data-count="7.2" data-decimals="1" data-suffix="%">0%</div><div class="stat__label">average net yield, 2025</div></div>
