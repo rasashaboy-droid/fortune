@@ -57,7 +57,7 @@ window.FH_CONFIG = {
   var PHOTOS = {
     hero: 'assets/img/hero-villa.jpg', // home hero, wide screens: keep the left side light, the headline sits there
                                        // (made from assets/img/hero.jpg, 2400px wide; tried and dropped: hero-villa-2.jpg)
-    heroMobile: 'assets/img/hero-villa-m.jpg',  // home hero on phones (under 720px): a vertical photo, light top 2/3, pool at the bottom.
+    heroMobile: 'assets/img/hero-mobile.jpg',  // home hero on phones (under 720px): a vertical photo, light top 2/3, pool at the bottom.
                      // Empty '' = phones use "hero" too. Framing: --hero-pos / --hero-pos-m on .hero in style.css
     v9: '1759372945658-1e9f56e751bd',   // villa with a pool at twilight (CTA band)
     v12: '1719887805632-de5be825f72b',  // modern house among palms (investors)

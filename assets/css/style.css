@@ -1818,14 +1818,14 @@ sup a:hover { color: var(--ink); }
 .hero__proof-item svg { color: var(--ink); flex-shrink: 0; }
 .hero .h1 { font-size: clamp(40px, 9.6vw, 84px); }
 @media (min-width: 720px) { .hero__content { max-width: 680px; } }
-.hero { --hero-pos-m: 56% 100%; }
+.hero { --hero-pos-m: 70% 100%; }
 .hero__bg img.is-alt { object-position: var(--hero-pos-m); }
 .hero__scrim { position: absolute; inset: 0; z-index: -1; pointer-events: none; }
 /* wide screens: a soft light veil on the left keeps the headline and buttons readable over the photo */
 @media (min-width: 720px) { .hero__scrim { background: linear-gradient(90deg, rgba(243,242,239,.8) 0%, rgba(243,242,239,.58) 36%, rgba(243,242,239,0) 62%); } }
 @media (min-width: 1100px) { .hero__scrim { background: linear-gradient(90deg, rgba(243,242,239,.6) 0%, rgba(243,242,239,.34) 32%, rgba(243,242,239,0) 52%); } }
 /* portrait tablets get the vertical photo (light sky on top), so the veil runs top to bottom */
-@media (min-width: 720px) { .hero:has(.hero__bg img.is-alt) .hero__scrim { background: linear-gradient(180deg, rgba(243,242,239,.6) 0%, rgba(243,242,239,.5) 40%, rgba(243,242,239,0) 62%); } }
+@media (min-width: 720px) { .hero:has(.hero__bg img.is-alt) .hero__scrim { background: linear-gradient(180deg, rgba(243,242,239,.72) 0%, rgba(243,242,239,.66) 46%, rgba(243,242,239,.25) 60%, rgba(243,242,239,0) 68%); } }
 
 /* ---------- Home hero on phones: text on the light top, photo below, one clear action ---------- */
 @media (max-width: 719px) {
